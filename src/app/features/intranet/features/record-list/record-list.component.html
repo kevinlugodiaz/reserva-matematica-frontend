@@ -1,0 +1,47 @@
+<div class="record-list px-xl py-xxl">
+  <header class="header-section mb-xl">
+    <h1>Lista de reservas</h1>
+  </header>
+  <div class="record-list__table">
+    <p-table #dt
+             [stripedRows]="true"
+             [paginator]="true"
+             [rows]="10"
+             [value]="dataSource()">
+      <ng-template #caption>
+        <p-iconfield>
+          <p-inputicon>
+            <i class="pi pi-search"></i>
+          </p-inputicon>
+          <input pInputText
+                 type="text"
+                 placeholder="Buscar reserva"/>
+        </p-iconfield>
+      </ng-template>
+      <ng-template #header>
+        <tr class="bg-primary text-white">
+          <th>Id</th>
+          <th>Nombre</th>
+          <th>Fecha de creación</th>
+          <th>Ver</th>
+        </tr>
+      </ng-template>
+      <ng-template #body
+                   let-record>
+        <tr>
+          <td>{{ record.id }}</td>
+          <td>{{ record.name }}</td>
+          <td>{{ record.date | date: 'dd/MM/yyyy' }}</td>
+          <td>
+            <p-button icon="pi pi-search"
+                      size="small"
+                      severity="secondary"
+                      pTooltip="Ver detalle"
+                      tooltipPosition="bottom"
+                      rounded></p-button>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

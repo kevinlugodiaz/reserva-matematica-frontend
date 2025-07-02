@@ -1,0 +1,29 @@
+.sign-in {
+  &__bg__img {
+    height: 260px;
+    object-position: bottom;
+  }
+
+  &__form {
+    max-width: 620px;
+  }
+
+  @media (width >= 820px) {
+    grid-template-columns: 1fr 1fr;
+
+    &__bg__img {
+      height: 100dvh;
+      object-position: center;
+    }
+
+    &__form {
+      max-width: 100%;
+    }
+  }
+
+  @media (width>= 1420px) {
+    &__form {
+      padding-right: calc(((100dvw - var(--content-wrapper-max-width)) / 2) + 2rem);
+    }
+  }
+}

@@ -1,0 +1,197 @@
+@use "../mixins/font-family";
+
+* {
+  &::-webkit-scrollbar {
+    width: 9px;
+    height: 9px;
+
+    &-thumb {
+      background: var(--gray-200);
+
+      &:active {
+        background: var(--gray-300);
+      }
+    }
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+ul,
+ol {
+  padding: 0;
+  margin: 0;
+}
+
+ul,
+body,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+}
+
+div,
+section,
+header,
+footer,
+main,
+article,
+aside,
+nav {
+  line-height: 0;
+}
+
+div,
+section,
+header,
+footer,
+main,
+article,
+aside,
+nav,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+span,
+small,
+a,
+ul,
+ol,
+li,
+button,
+input,
+textarea,
+select,
+label {
+  box-sizing: border-box;
+}
+
+input,
+textarea,
+select {
+  @include font-family.base;
+  border: none;
+  outline: none;
+}
+
+button {
+  border: none;
+  cursor: pointer;
+}
+
+p,
+span {
+  font-size: 15px;
+}
+
+p,
+span,
+small,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+th,
+td,
+label,
+input.p-inputtext {
+  @include font-family.base;
+}
+
+a {
+  text-decoration: none;
+}
+
+.bi {
+  line-height: 0;
+}
+
+img {
+  line-height: 0;
+  object-fit: cover;
+  user-select: none;
+  display: flex;
+}
+
+ul {
+  li {
+    list-style: none;
+  }
+}
+
+.p-button {
+  .p-button-label {
+    font-weight: var(--font-weight-semi-bold) !important;
+  }
+
+  &:not(.p-button-secondary) .p-button-label {
+    color: var(--white-color-base) !important;
+  }
+}
+
+.p-paginator-page-selected {
+  color: var(--white-color-base) !important;
+}
+
+.p-tooltip {
+  font-size: 13px !important;
+
+  &.input-tooltip {
+    max-width: 360px !important;
+  }
+
+  &-text {
+    padding: 10px 12px !important;
+    border-radius: 8px !important;
+    line-height: 1.1 !important;
+    text-align: center;
+    @include font-family.base;
+  }
+}
+
+.p-datatable {
+  &-table {
+    thead tr {
+      background-color: var(--blue-color-500);
+
+      th {
+        background-color: transparent;
+        color: var(--white-color-base);
+        font-weight: var(--font-weight-base);
+      }
+    }
+
+    thead tr th,
+    tbody tr td {
+      padding: var(--spacing-xs) var(--spacing-sm) !important;
+      font-size: var(--font-size-sm) !important;
+    }
+
+  }
+
+  &-header {
+    padding: 0 !important;
+    padding-bottom: var(--spacing-md) !important;
+  }
+
+  .p-paginator {
+    margin-top: var(--spacing-md) !important;
+  }
+}
