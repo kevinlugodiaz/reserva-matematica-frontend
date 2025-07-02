@@ -7,8 +7,8 @@
          height="847"
          alt="edificio protecta">
   </div>
-  <form class="sign-in__form flex flex-col justify-content-center gap-md px-xl py-xxl mx-auto w-100">
-    <header class="sign-in__form__header flex flex-col gap-md align-items-center mb-xl">
+  <form class="sign-in__form flex flex-col justify-center gap-md px-xl py-xxl mx-auto w-100">
+    <header class="sign-in__form__header flex flex-col gap-md align-center mb-xl">
       <img ngSrc="/resources/logo.png"
            width="260"
            height="54"
@@ -18,7 +18,8 @@
     </header>
 
     <div class="flex flex-col gap-xxs">
-      <label for="username">Ingrese su nombre de usuario (*)</label>
+      <label class="fs-md"
+             for="username">Ingrese su nombre de usuario (*)</label>
       <p-iconfield>
         <p-inputicon styleClass="pi pi-user"/>
         <input id="username"
@@ -28,7 +29,8 @@
       </p-iconfield>
     </div>
     <div class="flex flex-col gap-xxs">
-      <label for="password">Ingrese su contraseña (*)</label>
+      <label class="fs-md"
+             for="password">Ingrese su contraseña (*)</label>
       <p-iconfield>
         <p-inputicon styleClass="pi pi-lock"/>
         <input type="password"

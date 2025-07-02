@@ -6,6 +6,7 @@ import { Tooltip } from 'primeng/tooltip';
 import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
 import { InputText } from 'primeng/inputtext';
+import { Tag } from 'primeng/tag';
 
 @Component({
   selector: 'app-record-list',
@@ -16,7 +17,8 @@ import { InputText } from 'primeng/inputtext';
     Tooltip,
     IconField,
     InputIcon,
-    InputText
+    InputText,
+    Tag
   ],
   templateUrl: './record-list.component.html',
   styleUrl: './record-list.component.scss',
@@ -24,8 +26,9 @@ import { InputText } from 'primeng/inputtext';
 })
 export default class RecordListComponent {
   dataSource = signal(new Array(300).fill({
-    id: 1,
+    id: 197823,
     name: 'Record 1',
+    status: 'Creado',
     description: 'Description for Record 1',
     date: new Date('2023-01-01')
   }));

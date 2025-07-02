@@ -1,0 +1,29 @@
+<header class="header">
+  <div class="content-wrapper flex gap-md align-center justify-between">
+    <div class="header__logo flex align-center gap-md">
+      <img class="header__logo__img"
+           ngSrc="/resources/logo.png"
+           width="260"
+           height="54"
+           alt="Logo"/>
+      <h2 class="header__logo__title font-weight-semi-bold fs-lg">
+        Reservas Matemáticas
+      </h2>
+    </div>
+
+    <p-button severity="secondary"
+              variant="text"
+              size="large"
+              (click)="userMenu.toggle($event)">
+      <span class="p-button-label fs-sm font-weight-semi-bold">
+        John Doe
+      </span>
+      <p-avatar label="JD"
+                shape="circle"/>
+    </p-button>
+  </div>
+</header>
+
+<p-menu #userMenu
+        [popup]="true"
+        [model]="options()"></p-menu>
