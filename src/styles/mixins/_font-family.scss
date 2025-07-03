@@ -4,5 +4,12 @@
   font-weight: var(--font-weight-base);
   font-style: normal;
   line-height: 1.3;
-  color: var(--black-color-base);
+
+  &:not(
+    .p-message-text,
+    .p-tag-icon,
+    .p-tag-label
+  ) {
+    color: var(--black-color-base);
+  }
 }

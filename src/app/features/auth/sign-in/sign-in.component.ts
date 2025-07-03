@@ -4,6 +4,8 @@ import { InputText } from 'primeng/inputtext';
 import { Button } from 'primeng/button';
 import { IconField } from 'primeng/iconfield';
 import { InputIcon } from 'primeng/inputicon';
+import { FocusTrap } from 'primeng/focustrap';
+import { AutoFocus } from 'primeng/autofocus';
 
 @Component({
   selector: 'app-sign-in',
@@ -12,7 +14,9 @@ import { InputIcon } from 'primeng/inputicon';
     InputText,
     Button,
     IconField,
-    InputIcon
+    InputIcon,
+    FocusTrap,
+    AutoFocus
   ],
   templateUrl: './sign-in.component.html',
   styleUrl: './sign-in.component.scss',

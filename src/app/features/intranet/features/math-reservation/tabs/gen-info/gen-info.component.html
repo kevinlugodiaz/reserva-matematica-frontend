@@ -4,6 +4,7 @@
     <p-tablist>
       <p-tab value="0">
         1.1. Generación de reporte (Foto del mes)
+        <i class="bi bi-check-circle-fill fs-md-lg ml-xs"></i>
       </p-tab>
       <p-tab value="1">
         1.2. Control de producción de primas
@@ -24,5 +25,28 @@
         1.7. Generación de Reportes de validación
       </p-tab>
     </p-tablist>
+    <p-tabpanels>
+      <p-tabpanel value="0">
+        <app-report-gen/>
+      </p-tabpanel>
+      <p-tabpanel value="1">
+        <app-premium-production-control/>
+      </p-tabpanel>
+      <p-tabpanel value="2">
+        <app-validation-rules/>
+      </p-tabpanel>
+      <p-tabpanel value="3">
+        <app-data-change-control/>
+      </p-tabpanel>
+      <p-tabpanel value="4">
+        <app-payment-control/>
+      </p-tabpanel>
+      <p-tabpanel value="5">
+        <app-additional-metrics/>
+      </p-tabpanel>
+      <p-tabpanel value="6">
+        <app-validation-report-gen/>
+      </p-tabpanel>
+    </p-tabpanels>
   </p-tabs>
 </section>

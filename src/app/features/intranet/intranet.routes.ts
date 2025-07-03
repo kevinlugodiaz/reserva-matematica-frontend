@@ -12,7 +12,7 @@ export const routes: Routes = [
       },
       {
         path: 'math-reservation',
-        title: 'Reserva Matemática',
+        title: 'Proceso de Generación de Reservas Matemáticas',
         loadComponent: () => import('./features/math-reservation/math-reservation.component')
       },
       {

@@ -6,10 +6,13 @@
       </ng-template>
       <ng-template #end>
         <div class="flex align-center gap-md flex-wrap">
-          <p-select placeholder="Producto"/>
-          <p-select placeholder="Año"/>
-          <p-select placeholder="Mes"/>
-          <p-select placeholder="Moneda"/>
+          <p-select placeholder="Producto"
+                    [options]="productsList()"/>
+          <p-select placeholder="Año"
+                    [options]="yearsList()"/>
+          <p-select placeholder="Mes"
+                    [options]="monthsList()"/>
+          <!--<p-select placeholder="Moneda"/>-->
         </div>
       </ng-template>
     </p-toolbar>

@@ -7,7 +7,8 @@
          height="847"
          alt="edificio protecta">
   </div>
-  <form class="sign-in__form flex flex-col justify-center gap-md px-xl py-xxl mx-auto w-100">
+  <form class="sign-in__form flex flex-col justify-center gap-md px-xl py-xxl mx-auto w-100"
+        pFocusTrap>
     <header class="sign-in__form__header flex flex-col gap-md align-center mb-xl">
       <img ngSrc="/resources/logo.png"
            width="260"
@@ -21,18 +22,19 @@
       <label class="fs-md"
              for="username">Ingrese su nombre de usuario (*)</label>
       <p-iconfield>
-        <p-inputicon styleClass="pi pi-user"/>
+        <p-inputicon styleClass="bi bi-person"/>
         <input id="username"
                pInputText
                [fluid]="true"
-               pSize="large">
+               pSize="large"
+               [pAutoFocus]="true">
       </p-iconfield>
     </div>
     <div class="flex flex-col gap-xxs">
       <label class="fs-md"
              for="password">Ingrese su contraseña (*)</label>
       <p-iconfield>
-        <p-inputicon styleClass="pi pi-lock"/>
+        <p-inputicon styleClass="bi bi-lock"/>
         <input type="password"
                id="password"
                pInputText

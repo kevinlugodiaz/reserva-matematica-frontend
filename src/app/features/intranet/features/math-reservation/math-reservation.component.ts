@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { Tab, TabList, TabPanel, TabPanels, Tabs, TabsModule } from 'primeng/tabs';
 import { Toolbar } from 'primeng/toolbar';
 import { Select } from 'primeng/select';
@@ -34,4 +34,78 @@ import ClosingReportsComponent from './tabs/closing-reports/closing-reports.comp
 })
 export default class MathReservationComponent {
 
+  productsList = signal([
+    {
+      label: 'Renta Vitalicia',
+      value: 'renta-vitalicia'
+    }
+  ]);
+  yearsList = signal([
+    {
+      label: 2025,
+      value: 2025
+    },
+    {
+      label: 2024,
+      value: 2024
+    },
+    {
+      label: 2023,
+      value: 2023
+    },
+    {
+      label: 2022,
+      value: 2022
+    }
+  ]);
+  monthsList = signal([
+    {
+      label: 'Enero',
+      value: 1
+    },
+    {
+      label: 'Febrero',
+      value: 2
+    },
+    {
+      label: 'Marzo',
+      value: 3
+    },
+    {
+      label: 'Abril',
+      value: 4
+    },
+    {
+      label: 'Mayo',
+      value: 5
+    },
+    {
+      label: 'Junio',
+      value: 6
+    },
+    {
+      label: 'Julio',
+      value: 7
+    },
+    {
+      label: 'Agosto',
+      value: 8
+    },
+    {
+      label: 'Septiembre',
+      value: 9
+    },
+    {
+      label: 'Octubre',
+      value: 10
+    },
+    {
+      label: 'Noviembre',
+      value: 11
+    },
+    {
+      label: 'Diciembre',
+      value: 12
+    }
+  ]);
 }

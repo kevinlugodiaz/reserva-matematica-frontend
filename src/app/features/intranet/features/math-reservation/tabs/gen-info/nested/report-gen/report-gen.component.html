@@ -1,0 +1,69 @@
+<section class="report-gen">
+  <header class="report-gen__header flex align-center justify-end mb-md">
+    <p-button class="button-min-width"
+              label="Nuevo"
+              icon="bi bi-plus-lg"
+              size="small"
+              [disabled]="!!dataSource().length"
+              (click)="newReport()"/>
+  </header>
+
+  <p-table [rows]="5"
+           [value]="dataSource()"
+           [paginator]="!!dataSource().length">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Producto</th>
+        <th style="width: 15%">Año</th>
+        <th style="width: 15%">Mes</th>
+        <th style="width: 15%">Fec. creación</th>
+        <th style="width: 15%">Estado</th>
+        <th style="width: 10%">Acciones</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="6"
+            class="text-center">
+          No existe información
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body"
+                 let-item>
+      <tr>
+        <td>{{ item.product }}</td>
+        <td>{{ item.year }}</td>
+        <td>{{ item.month }}</td>
+        <td>{{ item.createdAt | date: 'd MMMM y' : '' : 'es-PE' | titlecase }}</td>
+        <td>
+          <p-tag [severity]="item.status.severity"
+                 icon="bi bi-check-lg"
+                 [value]="item.status.label"/>
+        </td>
+        <td>
+          <p-button class="button-excel"
+                    severity="success"
+                    label="Exportar"
+                    icon="bi bi-file-earmark-excel"
+                    size="small"
+                    pTooltip="Exportar a Excel"
+                    tooltipPosition="bottom"/>
+        </td>
+      </tr>
+    </ng-template>
+    @if (!!dataSource().length) {
+      <ng-template #footer>
+        <tr>
+          <td colspan="6">
+            <div class="report-gen__message">
+              <p-message severity="info"
+                         text="Tiempo de carga estimada para el producto Renta Vitalicia del periodo 2025-Julio: 00hr:40min :50 seg."
+                         icon="bi bi-info-circle"/>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    }
+  </p-table>
+</section>
