@@ -45,7 +45,8 @@
 					          size="small"
 					          pTooltip="Exportar a Excel"
 					          [disabled]="item.status.code !== 'FINISHED'"
-					          tooltipPosition="bottom"/>
+					          tooltipPosition="bottom"
+					          (click)="export()"/>
 				</td>
 			</tr>
 		</ng-template>
