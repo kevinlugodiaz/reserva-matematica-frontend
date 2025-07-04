@@ -1,80 +1,74 @@
 <main class="reservation">
-  <header class="mb-xl">
-    <h2 class="fs-xl font-weight-semi-bold mb-md">Proceso de Generación de Reservas Matemáticas</h2>
+	<header class="mb-xl">
+		<h2 class="fs-xl font-weight-semi-bold mb-md">Proceso de Generación de Reservas Matemáticas</h2>
+		<p-toolbar>
+			<ng-template #start>
+				<p-button label="Regresar" icon="bi bi-arrow-left" variant="text"/>
+			</ng-template>
+			<ng-template #end>
+				<div class="flex align-center gap-md flex-wrap">
+					<p-select placeholder="Producto" [options]="productsList()"/>
+					<p-select placeholder="Año" [options]="yearsList()"/>
+					<p-select placeholder="Mes" [options]="monthsList()"/>
+					<!--<p-select placeholder="Moneda"/>-->
+				</div>
+			</ng-template>
+		</p-toolbar>
+	</header>
 
-    <p-toolbar>
-      <ng-template #start>
-        <p-button label="Regresar"
-                  icon="bi bi-arrow-left"
-                  variant="text"/>
-      </ng-template>
-      <ng-template #end>
-        <div class="flex align-center gap-md flex-wrap">
-          <p-select placeholder="Producto"
-                    [options]="productsList()"/>
-          <p-select placeholder="Año"
-                    [options]="yearsList()"/>
-          <p-select placeholder="Mes"
-                    [options]="monthsList()"/>
-          <!--<p-select placeholder="Moneda"/>-->
-        </div>
-      </ng-template>
-    </p-toolbar>
-  </header>
-
-  <p-tabs value="0"
-          scrollable>
-    <p-tablist>
-      <p-tab value="0">
-        1. Generación de información
-      </p-tab>
-      <p-tab value="1">
-        2. Generación de interfaces de reservas y cesión
-      </p-tab>
-      <p-tab value="2">
-        3. Proceso de retroalimentación
-      </p-tab>
-      <p-tab value="3">
-        4. Resultado de cierre
-      </p-tab>
-      <p-tab value="4">
-        5. Registro y conciliación contable
-      </p-tab>
-      <p-tab value="5">
-        6. Reportes post cierre
-      </p-tab>
-    </p-tablist>
-    <p-tabpanels>
-      <p-tabpanel value="0">
-        @defer {
-          <app-gen-info/>
-        }
-      </p-tabpanel>
-      <p-tabpanel value="1">
-        @defer {
-          <app-gen-reservation-interfaces/>
-        }
-      </p-tabpanel>
-      <p-tabpanel value="2">
-        @defer {
-          <app-feedback-process/>
-        }
-      </p-tabpanel>
-      <p-tabpanel value="3">
-        @defer {
-          <app-closing-result/>
-        }
-      </p-tabpanel>
-      <p-tabpanel value="4">
-        @defer {
-          <app-accounting-reconciliation/>
-        }
-      </p-tabpanel>
-      <p-tabpanel value="5">
-        @defer {
-          <app-closing-reports/>
-        }
-      </p-tabpanel>
-    </p-tabpanels>
-  </p-tabs>
+	<p-tabs value="0"
+	        scrollable>
+		<p-tablist>
+			<p-tab value="0">
+				1. Generación de información
+			</p-tab>
+			<p-tab value="1">
+				2. Generación de interfaces de reservas y cesión
+			</p-tab>
+			<p-tab value="2">
+				3. Proceso de retroalimentación
+			</p-tab>
+			<p-tab value="3">
+				4. Resultado de cierre
+			</p-tab>
+			<p-tab value="4">
+				5. Registro y conciliación contable
+			</p-tab>
+			<p-tab value="5">
+				6. Reportes post cierre
+			</p-tab>
+		</p-tablist>
+		<p-tabpanels>
+			<p-tabpanel value="0">
+				@defer {
+					<app-gen-info/>
+				}
+			</p-tabpanel>
+			<p-tabpanel value="1">
+				@defer {
+					<app-gen-reservation-interfaces/>
+				}
+			</p-tabpanel>
+			<p-tabpanel value="2">
+				@defer {
+					<app-feedback-process/>
+				}
+			</p-tabpanel>
+			<p-tabpanel value="3">
+				@defer {
+					<app-closing-result/>
+				}
+			</p-tabpanel>
+			<p-tabpanel value="4">
+				@defer {
+					<app-accounting-reconciliation/>
+				}
+			</p-tabpanel>
+			<p-tabpanel value="5">
+				@defer {
+					<app-closing-reports/>
+				}
+			</p-tabpanel>
+		</p-tabpanels>
+	</p-tabs>
 </main>
