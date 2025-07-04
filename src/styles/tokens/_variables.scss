@@ -1,15 +1,16 @@
 :root {
   // Main colors
-  --blue-color-950: #0a0d2b;
-  --blue-color-900: #0f0f3c;
-  --blue-color-800: #191142;
-  --blue-color-700: #201751;
-  --blue-color-600: #2b1f6c;
-  --blue-color-500: #3a2b8c;
-  --blue-color-400: #4c3d9f;
-  --blue-color-300: #5f4eb2;
-  --blue-color-200: #dfefff;
-  --blue-color-100: #f0f7ff;
+  --blue-color-950: #0b0315;
+  --blue-color-900: #15052a;
+  --blue-color-800: #1e083f;
+  --blue-color-700: #250a52;
+  --blue-color-600: #2a0c5b;
+  --blue-color-500: #2a0e60; /* base institucional */
+  --blue-color-400: #472e7d;
+  --blue-color-300: #6b57a0;
+  --blue-color-200: #9988c6;
+  --blue-color-100: #d6d0ee;
+  --blue-color-50:  #f4f1fa;
 
   // Secondary colors
   --orange-color-950: #330000;
@@ -42,7 +43,7 @@
   --white-color-base: #ffffff;
 
   // Prime NG
-  --p-primary-50: var(--blue-color-700) !important;
+  --p-primary-50: var(--blue-color-50) !important;
   --p-primary-100: var(--blue-color-100) !important;
   --p-primary-200: var(--blue-color-200) !important;
   --p-primary-300: var(--blue-color-300) !important;

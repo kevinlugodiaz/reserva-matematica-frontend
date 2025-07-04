@@ -9,6 +9,7 @@ import FeedbackProcessComponent from './tabs/feedback-process/feedback-process.c
 import ClosingResultComponent from './tabs/closing-result/closing-result.component';
 import AccountingReconciliationComponent from './tabs/accounting-reconciliation/accounting-reconciliation.component';
 import ClosingReportsComponent from './tabs/closing-reports/closing-reports.component';
+import { Button } from 'primeng/button';
 
 @Component({
   selector: 'app-math-reservation',
@@ -26,8 +27,10 @@ import ClosingReportsComponent from './tabs/closing-reports/closing-reports.comp
     AccountingReconciliationComponent,
     ClosingReportsComponent,
     Toolbar,
-    Select
+    Select,
+    Button
   ],
+  standalone: true,
   templateUrl: './math-reservation.component.html',
   styleUrl: './math-reservation.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

@@ -17,6 +17,7 @@ import { DatePipe, TitleCasePipe } from '@angular/common';
     DatePipe,
     TitleCasePipe
   ],
+  standalone: true,
   templateUrl: './report-gen.component.html',
   styleUrl: './report-gen.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

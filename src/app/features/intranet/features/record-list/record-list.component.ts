@@ -20,6 +20,7 @@ import { Tag } from 'primeng/tag';
     InputText,
     Tag
   ],
+  standalone: true,
   templateUrl: './record-list.component.html',
   styleUrl: './record-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

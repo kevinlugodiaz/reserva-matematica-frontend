@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 @Component({
   selector: 'app-gen-reservation-interfaces',
   imports: [],
+  standalone: true,
   templateUrl: './gen-reservation-interfaces.component.html',
   styleUrl: './gen-reservation-interfaces.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

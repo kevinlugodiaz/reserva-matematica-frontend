@@ -8,7 +8,9 @@
   &:not(
     .p-message-text,
     .p-tag-icon,
-    .p-tag-label
+    .p-tag-label,
+    .p-button-label,
+    .p-button-icon
   ) {
     color: var(--black-color-base);
   }

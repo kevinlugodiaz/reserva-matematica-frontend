@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 @Component({
   selector: 'app-closing-reports',
   imports: [],
+  standalone: true,
   templateUrl: './closing-reports.component.html',
   styleUrl: './closing-reports.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

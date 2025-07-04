@@ -9,7 +9,8 @@
         "@schematics/angular:component": {
           "style": "scss",
           "changeDetection": "OnPush",
-          "exportDefault": true
+          "exportDefault": true,
+          "standalone": true
         }
       },
       "root": "",

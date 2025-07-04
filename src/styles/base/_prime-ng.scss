@@ -1,8 +1,8 @@
 @use "../mixins/font-family";
 
 p-button {
-  .p-button:not(.p-button-secondary) .p-button-label,
-  .p-button:not(.p-button-secondary) .p-button-icon {
+  .p-button:not(.p-button-secondary,.p-button-text) .p-button-label,
+  .p-button:not(.p-button-secondary,.p-button-text) .p-button-icon {
     color: var(--white-color-base) !important;
   }
 
@@ -38,10 +38,6 @@ p-button {
       }
     }
   }
-}
-
-.p-paginator-page-selected {
-  color: var(--white-color-base) !important;
 }
 
 .p-tooltip {
@@ -115,6 +111,7 @@ p-tabs {
   .p-tab {
     font-weight: var(--font-weight-semi-bold) !important;
     font-size: var(--font-size-sm) !important;
+    padding: .75rem 1rem !important;
 
     &-active {
       background-color: var(--blue-color-500);
@@ -128,8 +125,14 @@ p-tabs {
 }
 
 p-select {
+  .p-select-option {
+    &:hover {
+      background-color: var(--blue-color-50) !important;
+    }
+  }
+
   .p-select-option-selected {
-    background-color: var(--gray-200) !important;
+    background-color: var(--blue-color-50) !important;
 
     span {
       color: var(--black-color-base) !important;

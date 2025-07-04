@@ -12,6 +12,7 @@ import { Menu } from 'primeng/menu';
     Avatar,
     Menu
   ],
+  standalone: true,
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush

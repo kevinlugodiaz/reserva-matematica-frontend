@@ -25,6 +25,7 @@ import ValidationReportGenComponent from './nested/validation-report-gen/validat
     AdditionalMetricsComponent,
     ValidationReportGenComponent
   ],
+  standalone: true,
   templateUrl: './gen-info.component.html',
   styleUrl: './gen-info.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
