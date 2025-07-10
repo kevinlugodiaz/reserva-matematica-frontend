@@ -7,7 +7,13 @@
 			</ng-template>
 			<ng-template #end>
 				<div class="flex align-center gap-md flex-wrap">
-					<p-select placeholder="Producto" [options]="productsList()"/>
+					<p-multiSelect placeholder="Producto"
+					               [formControl]="productControl"
+					               [readonly]="true"
+					               [maxSelectedLabels]="1"
+					               [options]="productsList()"
+					               [showHeader]="false"
+					               [showToggleAll]="false"/>
 					<p-select placeholder="Año" [options]="yearsList()"/>
 					<p-select placeholder="Mes" [options]="monthsList()"/>
 					<!--<p-select placeholder="Moneda"/>-->

@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { Button } from 'primeng/button';
 import { TableModule } from 'primeng/table';
-import { Message } from 'primeng/message';
 import { Tag } from 'primeng/tag';
 import { Tooltip } from 'primeng/tooltip';
-import { DatePipe, TitleCasePipe } from '@angular/common';
+import { DatePipe } from '@angular/common';
+
 import { ExcelService } from '@shared/services/excel.service';
 import { LoaderService } from '@shared/services/loader.service';
 import { dummy } from './export.dummy';
@@ -24,7 +24,7 @@ interface Report {
 
 @Component({
 	selector: 'app-report-gen',
-	imports: [Button, TableModule, Message, Tag, Tooltip, DatePipe, TitleCasePipe],
+	imports: [Button, TableModule, Tag, Tooltip, DatePipe],
 	standalone: true,
 	templateUrl: './report-gen.component.html',
 	styleUrl: './report-gen.component.scss',

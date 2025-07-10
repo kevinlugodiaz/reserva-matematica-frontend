@@ -12,16 +12,17 @@
 		<ng-template pTemplate="header">
 			<tr>
 				<th>Producto</th>
-				<th style="width: 15%">Año</th>
-				<th style="width: 15%">Mes</th>
-				<th style="width: 15%">Fec. creación</th>
+				<th style="width: 10%">Año</th>
+				<th style="width: 10%">Mes</th>
+				<th style="width: 10%">Usuario</th>
+				<th style="width: 10%">Fec. creación</th>
 				<th style="width: 15%">Estado</th>
 				<th style="width: 10%">Acciones</th>
 			</tr>
 		</ng-template>
 		<ng-template pTemplate="emptymessage">
 			<tr>
-				<td colspan="6" class="text-center">
+				<td colspan="7" class="text-center">
 					No existe información
 				</td>
 			</tr>
@@ -31,38 +32,27 @@
 				<td>{{ item.product }}</td>
 				<td>{{ item.year }}</td>
 				<td>{{ item.month }}</td>
-				<td>{{ item.createdAt | date: 'd MMMM y' : '' : 'es-PE' | titlecase }}</td>
+				<td>
+					John Doe
+				</td>
+				<td>{{ item.createdAt | date: 'd.M.yy' }}</td>
 				<td>
 					<p-tag [severity]="item.status.severity"
 					       [icon]="item.status.codde === 'FINISHED' ? 'bi bi-check-lg' : ''"
 					       [value]="item.status.label"/>
 				</td>
 				<td>
-					<p-button class="button-excel"
-					          severity="success"
+					<p-button [class]="item.status.code !== 'FINISHED' ? '' : 'button-excel'"
+					          [severity]="item.status.code !== 'FINISHED' ? 'secondary' : 'success'"
 					          label="Exportar"
 					          icon="bi bi-file-earmark-excel"
 					          size="small"
-					          pTooltip="Exportar a Excel"
+					          [pTooltip]="item.status.code !== 'FINISHED' ? 'El reporte aún no ha sido generado' : 'Exportar a Excel'"
 					          [disabled]="item.status.code !== 'FINISHED'"
 					          tooltipPosition="bottom"
 					          (click)="export()"/>
 				</td>
 			</tr>
 		</ng-template>
-		@if (!!dataSource().length) {
-			<ng-template #footer>
-				<tr>
-					<td colspan="6">
-						<div class="report-gen__message">
-							<p-message severity="info"
-							           text="Tiempo de carga estimada para el producto Renta Vitalicia del periodo 2025-Julio: 00hr:40min :50 seg."
-							           icon="bi bi-info-circle"
-							           [closable]="true"/>
-						</div>
-					</td>
-				</tr>
-			</ng-template>
-		}
 	</p-table>
 </section>

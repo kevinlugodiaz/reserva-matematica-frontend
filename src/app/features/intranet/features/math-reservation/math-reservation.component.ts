@@ -10,6 +10,8 @@ import ClosingResultComponent from './tabs/closing-result/closing-result.compone
 import AccountingReconciliationComponent from './tabs/accounting-reconciliation/accounting-reconciliation.component';
 import ClosingReportsComponent from './tabs/closing-reports/closing-reports.component';
 import { Button } from 'primeng/button';
+import { MultiSelect } from 'primeng/multiselect';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
 	selector: 'app-math-reservation',
@@ -28,87 +30,90 @@ import { Button } from 'primeng/button';
 		ClosingReportsComponent,
 		Toolbar,
 		Select,
-		Button
+		Button,
+		MultiSelect,
+		ReactiveFormsModule,
 	],
 	standalone: true,
 	templateUrl: './math-reservation.component.html',
 	styleUrl: './math-reservation.component.scss',
-	changeDetection: ChangeDetectionStrategy.OnPush
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class MathReservationComponent {
-
 	productsList = signal([
 		{
 			label: 'Renta Vitalicia',
-			value: 'renta-vitalicia'
-		}
+			value: 'renta-vitalicia',
+		},
 	]);
 	yearsList = signal([
 		{
 			label: 2025,
-			value: 2025
+			value: 2025,
 		},
 		{
 			label: 2024,
-			value: 2024
+			value: 2024,
 		},
 		{
 			label: 2023,
-			value: 2023
+			value: 2023,
 		},
 		{
 			label: 2022,
-			value: 2022
-		}
+			value: 2022,
+		},
 	]);
 	monthsList = signal([
 		{
 			label: 'Enero',
-			value: 1
+			value: 1,
 		},
 		{
 			label: 'Febrero',
-			value: 2
+			value: 2,
 		},
 		{
 			label: 'Marzo',
-			value: 3
+			value: 3,
 		},
 		{
 			label: 'Abril',
-			value: 4
+			value: 4,
 		},
 		{
 			label: 'Mayo',
-			value: 5
+			value: 5,
 		},
 		{
 			label: 'Junio',
-			value: 6
+			value: 6,
 		},
 		{
 			label: 'Julio',
-			value: 7
+			value: 7,
 		},
 		{
 			label: 'Agosto',
-			value: 8
+			value: 8,
 		},
 		{
 			label: 'Septiembre',
-			value: 9
+			value: 9,
 		},
 		{
 			label: 'Octubre',
-			value: 10
+			value: 10,
 		},
 		{
 			label: 'Noviembre',
-			value: 11
+			value: 11,
 		},
 		{
 			label: 'Diciembre',
-			value: 12
-		}
+			value: 12,
+		},
 	]);
+
+	productControl = new FormControl(['renta-vitalicia']);
 }

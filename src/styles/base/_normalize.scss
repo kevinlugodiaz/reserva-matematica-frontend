@@ -49,7 +49,7 @@ main,
 article,
 aside,
 nav {
-  line-height: 0;
+  line-height: 1;
 }
 
 div,
@@ -113,7 +113,8 @@ td,
 label,
 input.p-inputtext,
 p-tab,
-li {
+li,
+.p-multiselect-label {
   @include font-family.base;
 }
 
