@@ -14,8 +14,8 @@
 				<th>Producto</th>
 				<th style="width: 10%">Año</th>
 				<th style="width: 10%">Mes</th>
+				<th style="width: 15%">Fec. creación</th>
 				<th style="width: 10%">Usuario</th>
-				<th style="width: 10%">Fec. creación</th>
 				<th style="width: 15%">Estado</th>
 				<th style="width: 10%">Acciones</th>
 			</tr>
@@ -32,10 +32,10 @@
 				<td>{{ item.product }}</td>
 				<td>{{ item.year }}</td>
 				<td>{{ item.month }}</td>
+				<td>{{ item.createdAt | date: 'd.M.yy hh:mm:ss a' }}</td>
 				<td>
 					John Doe
 				</td>
-				<td>{{ item.createdAt | date: 'd.M.yy' }}</td>
 				<td>
 					<p-tag [severity]="item.status.severity"
 					       [icon]="item.status.codde === 'FINISHED' ? 'bi bi-check-lg' : ''"
