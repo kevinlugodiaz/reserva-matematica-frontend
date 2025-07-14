@@ -1,0 +1,23 @@
+.new-period {
+	&__group {
+		&__item {
+			width: fit-content;
+			border: 8px solid white;
+			border-radius: 8px;
+			box-shadow: 0 0 0 2px var(--blue-color-100);
+
+			&__content {
+				background-color: var(--blue-color-50);
+				border-radius: 8px;
+				padding: var(--spacing-md);
+			}
+
+			&__percentage {
+				padding: 4px 8px;
+				width: fit-content;
+				border-radius: 8px;
+				background-color: var(--orange-color-200);
+			}
+		}
+	}
+}

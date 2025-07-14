@@ -2,7 +2,7 @@
   "name": "reserva-matematica-frontend",
   "version": "0.0.0-alpha.1",
   "scripts": {
-    "start": "npx ng serve",
+    "start": "npx ng serve -o",
     "build:dev": "pnpm run lint && npx ng build --configuration development",
     "build:qa": "pnpm run lint && npx ng build --configuration qa",
     "build:stg": "pnpm run lint && npx ng build --configuration staging",

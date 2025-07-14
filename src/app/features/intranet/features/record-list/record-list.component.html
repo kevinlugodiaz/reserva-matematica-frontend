@@ -1,57 +1,60 @@
 <div class="record-list">
-  <header class="header-section mb-xl">
-    <h1 class="font-weight-semi-bold fs-xxl">Lista de reservas</h1>
-  </header>
-  <div class="record-list__table">
-    <p-table [paginator]="true"
-             [rows]="10"
-             [value]="dataSource()">
-      <ng-template #caption>
-        <p-iconfield>
-          <p-inputicon>
-            <i class="bi bi-search"></i>
-          </p-inputicon>
-          <input pInputText
-                 type="text"
-                 placeholder="Buscar reserva"/>
-        </p-iconfield>
-      </ng-template>
-      <ng-template #header>
-        <tr>
-          <th>
-            Id
-          </th>
-          <th pSortableColumn="name">
-            <div class="flex align-center gap-xs">
-              <span>Nombre</span>
-              <p-sortIcon field="name"/>
-            </div>
-          </th>
-          <th>Fecha de creación</th>
-          <th>Estado</th>
-          <th>Ver</th>
-        </tr>
-      </ng-template>
-      <ng-template #body
-                   let-record>
-        <tr>
-          <td>{{ record.id }}</td>
-          <td>{{ record.name }}</td>
-          <td>{{ record.date | date: 'dd/MM/yyyy' }}</td>
-          <td>
-            <p-tag [value]="record.status"
-                   severity="info"></p-tag>
-          </td>
-          <td>
-            <p-button icon="bi bi-search"
-                      size="small"
-                      severity="secondary"
-                      pTooltip="Ver detalle"
-                      tooltipPosition="bottom"
-                      rounded></p-button>
-          </td>
-        </tr>
-      </ng-template>
-    </p-table>
-  </div>
+	<header class="header-section flex align-center justify-between mb-md">
+		<h1 class="font-weight-semi-bold fs-xxl">Lista de reservas</h1>
+		<div class="flex align-center justify-end gap-md">
+			<a routerLink="/intranet/new-period" pButton severity="secondary">
+				<i class="bi bi-plus-lg" pButtonIcon></i>
+				<span pButtonLabel>Nuevo periodo</span>
+			</a>
+			<p-button label="Consultar"></p-button>
+		</div>
+	</header>
+	<div class="record-list__table">
+		<p-table [paginator]="true"
+		         [rows]="10"
+		         [value]="dataSource()">
+			<ng-template #caption>
+				<div class="flex align-center justify-end gap-md">
+					<p-select placeholder="Año" [options]="yearsList()" [style]="{ width: '130px' }"/>
+					<p-select placeholder="Mes" [options]="monthsList()" [style]="{ width: '130px' }"/>
+				</div>
+			</ng-template>
+			<ng-template #header>
+				<tr>
+					<th>
+						Id
+					</th>
+					<th pSortableColumn="name">
+						<div class="flex align-center gap-xs">
+							<span>Nombre</span>
+							<p-sortIcon field="name"/>
+						</div>
+					</th>
+					<th>Fecha de creación</th>
+					<th>Estado</th>
+					<th>Ver</th>
+				</tr>
+			</ng-template>
+			<ng-template #body
+			             let-record>
+				<tr>
+					<td>{{ record.id }}</td>
+					<td>{{ record.name }}</td>
+					<td>{{ record.date | date: 'dd/MM/yyyy' }}</td>
+					<td>
+						<p-tag [value]="record.status"
+						       severity="info"></p-tag>
+					</td>
+					<td>
+						<p-button icon="bi bi-search"
+						          size="small"
+						          severity="secondary"
+						          pTooltip="Ver detalle"
+						          tooltipPosition="bottom"
+						          rounded></p-button>
+					</td>
+				</tr>
+			</ng-template>
+		</p-table>
+	</div>
 </div>

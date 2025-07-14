@@ -66,7 +66,7 @@ p-button {
         font-weight: var(--font-weight-base);
 
         &,
-        & * {
+        &:not(.p-datatable-column-sorted) * {
           color: var(--white-color-base);
         }
 
