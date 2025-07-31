@@ -128,3 +128,27 @@
   padding-top: var(--spacing-xxl);
   padding-bottom: var(--spacing-xxl);
 }
+
+.pl-xs {
+	padding-left: var(--spacing-xs);
+}
+
+.pl-md {
+	padding-left: var(--spacing-md);
+}
+
+.pl-xl {
+	padding-left: var(--spacing-xl);
+}
+
+.pr-xs {
+	padding-right: var(--spacing-xs);
+}
+
+.pr-md {
+	padding-right: var(--spacing-md);
+}
+
+.pr-xl {
+	padding-right: var(--spacing-xl);
+}

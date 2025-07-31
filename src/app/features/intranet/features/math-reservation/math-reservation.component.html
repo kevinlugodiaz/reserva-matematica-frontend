@@ -26,8 +26,10 @@
 		</p-tablist>
 	</p-tabs>
 
-	<div class="reservation__content flex gap-md mt-md">
-		<p-panelMenu [model]="menu()"></p-panelMenu>
+	<div class="reservation__content gap-md mt-md">
+		<div class="panel-menu">
+			<p-panelMenu [model]="menu()"></p-panelMenu>
+		</div>
 
 		<div class="reservation__content__body">
 			<router-outlet/>

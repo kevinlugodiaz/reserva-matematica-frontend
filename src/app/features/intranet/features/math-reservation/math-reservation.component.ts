@@ -35,47 +35,38 @@ export default class MathReservationComponent {
   menu = computed(() => [
     {
       label: '1. Generación de Información',
-      expanded: true,
+      icon: 'bi-dash-circle-fill',
+      expanded: this.currentPath().includes(MathReservationRoutes.genInfo),
+      command: () => this.navigate([this.basePath, MathReservationRoutes.genInfo, GenInfoRoutes.genReport].join('/')),
       items: [
         this.buildMenuItem(
-          'Generar reporte',
-          'bi-file-earmark-break',
+          'Generar reporte (Foto del mes)',
+          'success',
           MathReservationRoutes.genInfo,
           GenInfoRoutes.genReport,
         ),
         this.buildMenuItem(
-          'Validaciones de bloqueo',
-          'bi-exclamation-circle',
+          'Control de producción de primas',
+          'success',
           MathReservationRoutes.genInfo,
-          GenInfoRoutes.lockValidations,
-        ),
-        this.buildMenuItem(
-          'Excepciones reportadas (subsanables)',
-          'bi-exclamation-triangle',
-          MathReservationRoutes.genInfo,
-          GenInfoRoutes.reportedExceptions,
+          GenInfoRoutes.premiumProductionControl,
         ),
         this.buildMenuItem(
           'Control de cambio de datos',
-          'bi-exclamation-triangle',
+          null,
           MathReservationRoutes.genInfo,
           GenInfoRoutes.dataChangeControl,
         ),
-        this.buildMenuItem(
-          'Control de pagos',
-          'bi-bar-chart',
-          MathReservationRoutes.genInfo,
-          GenInfoRoutes.paymentControl,
-        ),
+        this.buildMenuItem('Control de pagos', null, MathReservationRoutes.genInfo, GenInfoRoutes.paymentControl),
         this.buildMenuItem(
           'Métricas adicionales',
-          'bi-currency-dollar',
+          null,
           MathReservationRoutes.genInfo,
           GenInfoRoutes.additionalMetrics,
         ),
         this.buildMenuItem(
           'Generación de Reportes de Validación',
-          'bi-file-earmark-text',
+          null,
           MathReservationRoutes.genInfo,
           GenInfoRoutes.validationReportGen,
         ),
@@ -83,6 +74,8 @@ export default class MathReservationComponent {
     },
     {
       label: '2. Generación de Interfaces de Reservas',
+      routerLink: [this.basePath, MathReservationRoutes.genReservationInterfaces],
+      expanded: this.currentPath().includes(MathReservationRoutes.genReservationInterfaces),
     },
     {
       label: '3. Proceso de Retroalimentación',
@@ -103,9 +96,17 @@ export default class MathReservationComponent {
     return this.currentPath() === fullPath ? 'router-link-active' : '';
   }
 
+  /**
+   * Construye un objeto de ítem de menú para el PanelMenu.
+   * @param label Etiqueta visible del ítem.
+   * @param icon Estado del ícono: 'success', 'error', 'pending' o null.
+   * @param originPath Ruta base del ítem.
+   * @param path Ruta específica del ítem.
+   * @returns Objeto con propiedades para el ítem de menú.
+   */
   buildMenuItem(
     label: string,
-    icon: string,
+    icon: 'success' | 'error' | 'pending' | null,
     originPath: string,
     path: string,
   ): {
@@ -117,7 +118,7 @@ export default class MathReservationComponent {
   } {
     return {
       label,
-      icon,
+      icon: icon === 'success' ? 'bi-check-circle-fill' : icon === 'error' ? 'bi-x-circle-fill' : 'bi-dash-circle-fill',
       routerLink: [this.basePath, originPath, path],
       styleClass: this.validateRoute(originPath, path),
       command: () => this.currentPath.set([this.basePath, originPath, path].join('/')),
@@ -125,6 +126,13 @@ export default class MathReservationComponent {
   }
 
   tabChange(tab: string | number): void {
-    this.router.navigateByUrl(`${this.basePath}/${this.tabPaths[tab.toString()]}`);
+    const path = `${this.basePath}/${this.tabPaths[tab.toString()]}`;
+    this.navigate(path);
+  }
+
+  navigate(path: string): void {
+    this.router.navigateByUrl(path).then(() => {
+      this.currentPath.set(this.router.url);
+    });
   }
 }

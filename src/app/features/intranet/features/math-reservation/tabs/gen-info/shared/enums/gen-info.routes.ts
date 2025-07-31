@@ -1,7 +1,6 @@
 export enum GenInfoRoutes {
   genReport = 'gen-report',
-  lockValidations = 'lock-validations',
-  reportedExceptions = 'reported-exceptions',
+  premiumProductionControl = 'premium-production-control',
   dataChangeControl = 'data-change-control',
   paymentControl = 'payment-control',
   additionalMetrics = 'additional-metrics',

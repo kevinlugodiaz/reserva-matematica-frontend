@@ -11,12 +11,8 @@ export const routes: Routes = [
         loadComponent: () => import('./nested/gen-report/gen-report.component'),
       },
       {
-        path: GenInfoRoutes.lockValidations,
-        loadComponent: () => import('./nested/lock-validations/lock-validations.component'),
-      },
-      {
-        path: GenInfoRoutes.reportedExceptions,
-        loadComponent: () => import('./nested/reported-exceptions/reported-exceptions.component'),
+        path: GenInfoRoutes.premiumProductionControl,
+        loadComponent: () => import('./nested/premium-production-control/premium-production-control.component'),
       },
       {
         path: GenInfoRoutes.dataChangeControl,
