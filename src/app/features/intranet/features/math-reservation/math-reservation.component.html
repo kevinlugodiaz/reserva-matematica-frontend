@@ -3,8 +3,7 @@
 		<h2 class="fs-xl font-weight-semi-bold mb-md">Proceso de Generación de Reservas Matemáticas</h2>
 	</header>
 
-	<p-tabs value="0"
-	        scrollable>
+	<p-tabs value="0" (valueChange)="tabChange($event)" scrollable>
 		<p-tablist>
 			<p-tab value="0">
 				1. Generación de información
@@ -25,69 +24,13 @@
 				6. Reportes post cierre
 			</p-tab>
 		</p-tablist>
-		@if (false) {
-			<p-tabpanels>
-				<p-tabpanel value="0">
-					@defer {
-						<app-gen-info/>
-					}
-				</p-tabpanel>
-				<p-tabpanel value="1">
-					@defer {
-						<app-gen-reservation-interfaces/>
-					}
-				</p-tabpanel>
-				<p-tabpanel value="2">
-					@defer {
-						<app-feedback-process/>
-					}
-				</p-tabpanel>
-				<p-tabpanel value="3">
-					@defer {
-						<app-closing-result/>
-					}
-				</p-tabpanel>
-				<p-tabpanel value="4">
-					@defer {
-						<app-accounting-reconciliation/>
-					}
-				</p-tabpanel>
-				<p-tabpanel value="5">
-					@defer {
-						<app-closing-reports/>
-					}
-				</p-tabpanel>
-			</p-tabpanels>
-		}
 	</p-tabs>
 
 	<div class="reservation__content flex gap-md mt-md">
 		<p-panelMenu [model]="menu()"></p-panelMenu>
 
 		<div class="reservation__content__body">
-			<div class="gen-report">
-				<span class="font-weight-semi-bold fs-md-lg mb-md block">Generar reporte - Julio 2025</span>
-				<table>
-					<tr>
-						<td class="font-weight-semi-bold">Estado</td>
-						<td>
-							: <p-tag severity="warn" value="Interrumpido"></p-tag>
-						</td>
-					</tr>
-					<tr>
-						<td class="font-weight-semi-bold">Responsable</td>
-						<td>
-							: Consultor actuarial - Héctor
-						</td>
-					</tr>
-					<tr>
-						<td class="font-weight-semi-bold">Fecha</td>
-						<td>
-							: 05/08/2024 - 14:00
-						</td>
-					</tr>
-				</table>
-			</div>
+			<router-outlet/>
 		</div>
 	</div>
 </main>

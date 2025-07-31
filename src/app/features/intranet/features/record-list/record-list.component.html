@@ -30,6 +30,7 @@
 							<p-sortIcon field="name"/>
 						</div>
 					</th>
+					<th>Periodo contable</th>
 					<th>Fecha de creación</th>
 					<th>Estado</th>
 					<th>Ver</th>
@@ -40,6 +41,7 @@
 				<tr>
 					<td>{{ record.id }}</td>
 					<td>{{ record.name }}</td>
+					<td>Julio - 2025</td>
 					<td>{{ record.date | date: 'dd/MM/yyyy' }}</td>
 					<td>
 						<p-tag [value]="record.status"

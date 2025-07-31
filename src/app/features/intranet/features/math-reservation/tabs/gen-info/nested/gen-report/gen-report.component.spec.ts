@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import ValidationRulesComponent from './validation-rules.component';
+import GenReportComponent from './gen-report.component';
 
-describe('ValidationRulesComponent', () => {
-  let component: ValidationRulesComponent;
-  let fixture: ComponentFixture<ValidationRulesComponent>;
+describe('GenReportComponent', () => {
+  let component: GenReportComponent;
+  let fixture: ComponentFixture<GenReportComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ValidationRulesComponent]
+      imports: [GenReportComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ValidationRulesComponent);
+    fixture = TestBed.createComponent(GenReportComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
