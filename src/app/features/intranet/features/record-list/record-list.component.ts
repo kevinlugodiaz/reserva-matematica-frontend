@@ -1,21 +1,28 @@
-import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { DatePipe } from '@angular/common';
-import { Button, ButtonDirective, ButtonIcon, ButtonLabel } from 'primeng/button';
+import { Button } from 'primeng/button';
 import { Tooltip } from 'primeng/tooltip';
 import { Tag } from 'primeng/tag';
 import { Select } from 'primeng/select';
-import { RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-record-list',
-  imports: [TableModule, DatePipe, Button, Tooltip, Tag, Select, ButtonDirective, ButtonLabel, ButtonIcon, RouterLink],
+  imports: [TableModule, DatePipe, Button, Tooltip, Tag, Select, ReactiveFormsModule],
   standalone: true,
   templateUrl: './record-list.component.html',
   styleUrl: './record-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class RecordListComponent {
+  private readonly router = inject(Router);
+  private readonly builder = inject(FormBuilder);
+
+  yearControl = this.builder.control<number | null>(null);
+  monthControl = this.builder.control<number | null>(null);
+
   yearsList = signal([
     {
       label: 2025,
@@ -93,4 +100,16 @@ export default class RecordListComponent {
       date: new Date('2023-01-01'),
     }),
   );
+
+  setCurrentDate() {
+    const currentMonth = new Date().getMonth() + 1;
+    const currentYear = new Date().getFullYear();
+    this.yearControl.setValue(currentYear);
+    this.monthControl.setValue(currentMonth);
+  }
+
+  goToGenReport() {
+    localStorage.setItem('period', `${this.yearControl.value}${this.monthControl.value!.toString().padStart(2, '0')}`);
+    this.router.navigate(['/intranet/new-period']);
+  }
 }

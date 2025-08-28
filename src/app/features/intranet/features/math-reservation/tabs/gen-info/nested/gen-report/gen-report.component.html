@@ -1,11 +1,12 @@
 <div class="gen-report">
-	<span class="font-weight-semi-bold fs-xl mb-md block">Generar reporte - Julio 2025</span>
+	<span class="font-weight-semi-bold fs-xl mb-md block">Generar reporte - {{ periodLabel() }}</span>
 	<table class="mb-md">
 		<tr>
 			<td class="font-weight-semi-bold">Estado</td>
 			<td>
 				:
-				<p-tag severity="success" value="Finalizado"></p-tag>
+				<p-tag [severity]="existFile() ? 'success' : 'secondary'"
+				       [value]="existFile() ? 'Finalizado' : 'Procesando'"></p-tag>
 			</td>
 		</tr>
 		<tr>
@@ -22,13 +23,13 @@
 		</tr>
 	</table>
 	<div class="flex gap-md">
-		<!--<p-button severity="primary" label="Regenerar" icon="bi bi-arrow-clockwise"/>-->
+		<p-button severity="primary" label="Regenerar" icon="bi bi-arrow-clockwise" [disabled]="!existFile()"/>
 		<p-button class="button-excel"
 		          [label]="!existFile() ? 'Generando reporte' : 'Exportar'"
 		          icon="bi bi-file-excel"
 		          [loading]="!existFile()"
 		          [disabled]="!existFile()"
 		          (click)="downloadFile()"/>
-		<!--<p-button severity="primary" label="Continuar" icon="bi bi-arrow-right" iconPos="right"/>-->
+		<p-button severity="primary" label="Continuar" icon="bi bi-arrow-right" iconPos="right" [disabled]="!existFile()"/>
 	</div>
 </div>

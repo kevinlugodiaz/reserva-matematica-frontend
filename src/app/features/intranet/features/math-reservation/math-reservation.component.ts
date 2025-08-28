@@ -47,7 +47,7 @@ export default class MathReservationComponent {
         ),
         this.buildMenuItem(
           'Control de producción de primas',
-          'success',
+	        null,
           MathReservationRoutes.genInfo,
           GenInfoRoutes.premiumProductionControl,
         ),

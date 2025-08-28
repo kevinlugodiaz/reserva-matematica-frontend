@@ -1,10 +1,8 @@
-import { ApplicationRef, ChangeDetectionStrategy, Component, inject, OnInit, signal } from '@angular/core';
+import { ApplicationRef, ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
 import { Button } from 'primeng/button';
 import { Tag } from 'primeng/tag';
-import { ExcelService } from '@shared/services/excel.service';
 import { GenReportService } from './shared/services/gen-report.service';
-import { dummy } from './dummy';
-import { filter, first, interval, switchMap, take, takeWhile, tap, timer } from 'rxjs';
+import { filter, first, interval, switchMap, take, tap, timer } from 'rxjs';
 
 @Component({
   selector: 'app-gen-report',
@@ -14,11 +12,31 @@ import { filter, first, interval, switchMap, take, takeWhile, tap, timer } from 
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class GenReportComponent implements OnInit {
-  private readonly excelService = inject(ExcelService);
   private readonly genReportService = inject(GenReportService);
-  private readonly dummy = dummy;
   readonly existFile = signal(false);
   private readonly appRef = inject(ApplicationRef);
+  private readonly period = signal(localStorage.getItem('period') || '202405');
+
+  private readonly monthLabel = {
+    '01': 'Enero',
+    '02': 'Febrero',
+    '03': 'Marzo',
+    '04': 'Abril',
+    '05': 'Mayo',
+    '06': 'Junio',
+    '07': 'Julio',
+    '08': 'Agosto',
+    '09': 'Septiembre',
+    '10': 'Octubre',
+    '11': 'Noviembre',
+    '12': 'Diciembre',
+  };
+
+  readonly periodLabel = computed(() => {
+    const year = this.period().substring(0, 4);
+    const month = this.period().substring(4, 6);
+    return `${this.monthLabel[month as keyof typeof this.monthLabel]} ${year}`;
+  });
 
   ngOnInit() {
     timer(800)
@@ -28,7 +46,7 @@ export default class GenReportComponent implements OnInit {
         first(),
       )
       .subscribe(() => {
-        this.exportData('202405');
+        this.exportData(this.period());
       });
   }
 
@@ -38,10 +56,7 @@ export default class GenReportComponent implements OnInit {
     interval(5000)
       .pipe(
         switchMap(() => this.genReportService.existFile(period)),
-        tap((res) => {
-          console.log(res);
-          this.existFile.set(res);
-        }),
+        tap((res) => this.existFile.set(res)),
         filter((res) => res),
         take(1),
       )
@@ -49,8 +64,8 @@ export default class GenReportComponent implements OnInit {
   }
 
   async downloadFile() {
-    const file = await this.genReportService.getReport('202405');
-    this.descargarBlob(file, `reporte-202405.xls`);
+    const file = await this.genReportService.getReport(this.period());
+    this.descargarBlob(file, `reporte-${this.period()}.xls`);
   }
 
   descargarBlob(blob: Blob, nombreArchivo: string): void {
