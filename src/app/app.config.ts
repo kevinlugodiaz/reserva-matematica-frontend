@@ -2,9 +2,9 @@ import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } fr
 import { provideRouter, withViewTransitions } from '@angular/router';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { provideHttpClient, withFetch } from '@angular/common/http';
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeng/themes/aura';
-
 import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
@@ -21,5 +21,6 @@ export const appConfig: ApplicationConfig = {
       },
     }),
     provideRouter(routes, withViewTransitions()),
+	  provideHttpClient(withFetch()),
   ],
 };
