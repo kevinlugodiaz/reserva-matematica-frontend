@@ -24,12 +24,17 @@
 	</table>
 	<div class="flex gap-md">
 		<p-button severity="primary" label="Regenerar" icon="bi bi-arrow-clockwise" [disabled]="!existFile()"/>
-		<p-button class="button-excel"
+		<p-button severity="primary"
+		          class="button-excel"
 		          [label]="!existFile() ? 'Generando reporte' : 'Exportar'"
 		          icon="bi bi-file-excel"
 		          [loading]="!existFile()"
 		          [disabled]="!existFile()"
 		          (click)="downloadFile()"/>
-		<p-button severity="primary" label="Continuar" icon="bi bi-arrow-right" iconPos="right" [disabled]="!existFile()"/>
+		<p-button severity="primary"
+		          label="Continuar"
+		          icon="bi bi-arrow-right"
+		          iconPos="right"
+		          [disabled]="!existFile()"/>
 	</div>
 </div>

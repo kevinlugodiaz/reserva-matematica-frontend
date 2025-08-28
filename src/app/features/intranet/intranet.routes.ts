@@ -8,7 +8,7 @@ export const routes: Routes = [
     children: [
       {
         path: IntranetRoutes.recordList,
-        title: 'Lista de Reservas',
+        title: 'Reservas Matemáticas',
         loadComponent: () => import('./features/record-list/record-list.component'),
       },
       {
