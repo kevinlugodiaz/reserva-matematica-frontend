@@ -102,8 +102,10 @@ export default class RecordListComponent {
   );
 
   setCurrentDate() {
-    const currentMonth = new Date().getMonth() + 1;
-    const currentYear = new Date().getFullYear();
+    // const currentMonth = new Date().getMonth() + 1;
+    const currentMonth = 5;
+    // const currentYear = new Date().getFullYear();
+    const currentYear = 2024;
     this.yearControl.setValue(currentYear);
     this.monthControl.setValue(currentMonth);
   }
