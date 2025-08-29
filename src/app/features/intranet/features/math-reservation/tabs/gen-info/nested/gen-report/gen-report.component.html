@@ -16,14 +16,14 @@
 			</td>
 		</tr>
 		<tr>
-			<td class="font-weight-semi-bold">Fecha</td>
+			<td class="font-weight-semi-bold">Fecha de estado</td>
 			<td>
 				: 05/08/2024 - 14:00
 			</td>
 		</tr>
 	</table>
 	<div class="flex gap-md">
-		<p-button severity="primary" label="Regenerar" icon="bi bi-arrow-clockwise" [disabled]="!existFile()"/>
+		<p-button severity="primary" label="Reprocesar" icon="bi bi-arrow-clockwise" disabled/>
 		<p-button severity="primary"
 		          class="button-excel"
 		          [label]="!existFile() ? 'Generando reporte' : 'Exportar'"
@@ -35,6 +35,6 @@
 		          label="Continuar"
 		          icon="bi bi-arrow-right"
 		          iconPos="right"
-		          [disabled]="!existFile()"/>
+		          disabled/>
 	</div>
 </div>

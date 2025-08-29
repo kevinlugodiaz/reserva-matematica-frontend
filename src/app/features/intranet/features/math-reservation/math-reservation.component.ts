@@ -51,6 +51,12 @@ export default class MathReservationComponent {
           MathReservationRoutes.genInfo,
           GenInfoRoutes.premiumProductionControl,
         ),
+	      this.buildMenuItem(
+		      'Reglas de Validación',
+		      null,
+		      MathReservationRoutes.genInfo,
+		      GenInfoRoutes.validationReportGen,
+	      ),
         this.buildMenuItem(
           'Control de cambio de datos',
           null,
