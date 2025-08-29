@@ -58,6 +58,14 @@
 									"maximumError": "8kB"
 								}
 							],
+							"optimization": true,
+							"buildOptimizer": true,
+							"aot": true,
+							"vendorChunk": false,
+							"commonChunk": false,
+							"namedChunks": false,
+							"extractCss": true,
+							"inlineCritical": true,
 							"outputHashing": "all",
 							"fileReplacements": [
 								{
@@ -79,7 +87,15 @@
 									"maximumError": "8kB"
 								}
 							],
-							"outputHashing": "all",
+							"optimization": true,
+							"buildOptimizer": true,
+							"aot": true,
+							"sourceMap": true,
+							"vendorChunk": false,
+							"commonChunk": false,
+							"namedChunks": false,
+							"extractCss": true,
+							"inlineCritical": true,
 							"fileReplacements": [
 								{
 									"replace": "src/environments/environment.ts",
@@ -100,7 +116,15 @@
 									"maximumError": "8kB"
 								}
 							],
-							"outputHashing": "all",
+							"optimization": true,
+							"buildOptimizer": true,
+							"aot": true,
+							"sourceMap": true,
+							"vendorChunk": false,
+							"commonChunk": false,
+							"namedChunks": false,
+							"extractCss": true,
+							"inlineCritical": true,
 							"fileReplacements": [
 								{
 									"replace": "src/environments/environment.ts",

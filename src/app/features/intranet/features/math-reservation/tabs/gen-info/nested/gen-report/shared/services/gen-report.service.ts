@@ -10,7 +10,7 @@ export class GenReportService {
 
   existFile(period: string) {
     return this.http
-      .head(`https://rrmm-reportes-periodos-bucket.s3.us-east-1.amazonaws.com/reporte-${period}.xlsx`, {
+      .head(`/reports/reporte-${period}.xlsx`, {
         observe: 'response',
       })
       .pipe(
@@ -21,7 +21,7 @@ export class GenReportService {
 
   async getReport(period: string) {
     return await firstValueFrom(
-      this.http.get(`https://rrmm-reportes-periodos-bucket.s3.us-east-1.amazonaws.com/reporte-${period}.xlsx`, {
+      this.http.get(`/reports/reporte-${period}.xlsx`, {
         responseType: 'blob',
       }),
     );
