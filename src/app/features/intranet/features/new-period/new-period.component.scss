@@ -1,0 +1,33 @@
+.new-period {
+	&__group {
+		display: grid;
+		gap: 1rem;
+		grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+
+		&__item {
+			width: 100%;
+			border: 8px solid white;
+			border-radius: 8px;
+			box-shadow: 0 0 0 2px var(--blue-color-100);
+
+			&--disabled {
+				user-select: none;
+				pointer-events: none;
+				opacity: .5;
+			}
+
+			&__content {
+				background-color: var(--blue-color-50);
+				border-radius: 8px;
+				padding: var(--spacing-md);
+			}
+
+			&__percentage {
+				padding: 4px 8px;
+				width: fit-content;
+				border-radius: 8px;
+				background-color: var(--orange-color-200);
+			}
+		}
+	}
+}

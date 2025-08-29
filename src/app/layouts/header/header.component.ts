@@ -6,30 +6,21 @@ import { Menu } from 'primeng/menu';
 
 @Component({
   selector: 'app-header',
-  imports: [
-    NgOptimizedImage,
-    Button,
-    Avatar,
-    Menu
-  ],
+  imports: [NgOptimizedImage, Button, Avatar, Menu],
+  standalone: true,
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent {
   options = signal([
     {
-      label: 'Perfil',
-      items: [
-        {
-          label: 'Cerrar sesión',
-          icon: 'pi pi-sign-out',
-          command: () => {
-            // Aquí puedes agregar la lógica para cerrar sesión
-            console.log('Cerrar sesión');
-          }
-        }
-      ]
-    }
+      label: 'Cerrar sesión',
+      icon: 'pi pi-sign-out',
+      command: () => {
+        // Aquí puedes agregar la lógica para cerrar sesión
+        console.log('Cerrar sesión');
+      },
+    },
   ]);
 }

@@ -1,57 +1,83 @@
 <div class="record-list">
-  <header class="header-section mb-xl">
-    <h1 class="font-weight-semi-bold fs-xxl">Lista de reservas</h1>
-  </header>
-  <div class="record-list__table">
-    <p-table [paginator]="true"
-             [rows]="10"
-             [value]="dataSource()">
-      <ng-template #caption>
-        <p-iconfield>
-          <p-inputicon>
-            <i class="pi pi-search"></i>
-          </p-inputicon>
-          <input pInputText
-                 type="text"
-                 placeholder="Buscar reserva"/>
-        </p-iconfield>
-      </ng-template>
-      <ng-template #header>
-        <tr>
-          <th>
-            Id
-          </th>
-          <th pSortableColumn="name">
-            <div class="flex align-center gap-xs">
-              <span>Nombre</span>
-              <p-sortIcon field="name"/>
-            </div>
-          </th>
-          <th>Fecha de creación</th>
-          <th>Estado</th>
-          <th>Ver</th>
-        </tr>
-      </ng-template>
-      <ng-template #body
-                   let-record>
-        <tr>
-          <td>{{ record.id }}</td>
-          <td>{{ record.name }}</td>
-          <td>{{ record.date | date: 'dd/MM/yyyy' }}</td>
-          <td>
-            <p-tag [value]="record.status"
-                   severity="info"></p-tag>
-          </td>
-          <td>
-            <p-button icon="pi pi-search"
-                      size="small"
-                      severity="secondary"
-                      pTooltip="Ver detalle"
-                      tooltipPosition="bottom"
-                      rounded></p-button>
-          </td>
-        </tr>
-      </ng-template>
-    </p-table>
-  </div>
+	<header class="header-section flex align-center justify-between mb-md">
+		<!--<h1 class="font-weight-semi-bold fs-xxl">Lista de periodos</h1>-->
+		<div class="flex flex-col align-center justify-center gap-md w-100">
+			<div class="flex align-center justify-end gap-md">
+				<p-button label="Nuevo periodo"
+				          severity="secondary"
+				          icon="bi bi-plus-lg"
+				          (click)="setCurrentDate()"></p-button>
+				<!--<p-button label="Consultar" disabled></p-button>-->
+			</div>
+			<div class="flex align-center justify-end gap-md">
+				<p-select placeholder="Año"
+				          [options]="yearsList()"
+				          [readonly]="true"
+				          [style]="{ width: '130px' }"
+				          [formControl]="yearControl"/>
+				<p-select placeholder="Mes"
+				          [options]="monthsList()"
+				          [readonly]="true"
+				          [style]="{ width: '130px' }"
+				          [formControl]="monthControl"/>
+			</div>
+
+			<p-button label="Aceptar" disabled [disabled]="!yearControl.value || !monthControl.value"
+			          (click)="goToGenReport()"></p-button>
+		</div>
+	</header>
+
+
+	@if (false) {
+		<div class="record-list__table">
+			<p-table [paginator]="true"
+			         [rows]="10"
+			         [value]="dataSource()">
+				<ng-template #caption>
+					<div class="flex align-center justify-end gap-md">
+						<p-select placeholder="Año" [options]="yearsList()" [style]="{ width: '130px' }"/>
+						<p-select placeholder="Mes" [options]="monthsList()" [style]="{ width: '130px' }"/>
+					</div>
+				</ng-template>
+				<ng-template #header>
+					<tr>
+						<th>
+							Id
+						</th>
+						<th pSortableColumn="name">
+							<div class="flex align-center gap-xs">
+								<span>Nombre</span>
+								<p-sortIcon field="name"/>
+							</div>
+						</th>
+						<th>Periodo contable</th>
+						<th>Fecha de creación</th>
+						<th>Estado</th>
+						<th>Ver</th>
+					</tr>
+				</ng-template>
+				<ng-template #body
+				             let-record>
+					<tr>
+						<td>{{ record.id }}</td>
+						<td>{{ record.name }}</td>
+						<td>Julio - 2025</td>
+						<td>{{ record.date | date: 'dd/MM/yyyy' }}</td>
+						<td>
+							<p-tag [value]="record.status"
+							       severity="info"></p-tag>
+						</td>
+						<td>
+							<p-button icon="bi bi-search"
+							          size="small"
+							          severity="secondary"
+							          pTooltip="Ver detalle"
+							          tooltipPosition="bottom"
+							          rounded></p-button>
+						</td>
+					</tr>
+				</ng-template>
+			</p-table>
+		</div>
+	}
 </div>

@@ -1,73 +1,38 @@
 <main class="reservation">
-  <header class="mb-xl">
-    <p-toolbar>
-      <ng-template #start>
-        <h2 class="fs-md-lg font-weight-semi-bold">Proceso de Generación de Reservas Matemáticas</h2>
-      </ng-template>
-      <ng-template #end>
-        <div class="flex align-center gap-md flex-wrap">
-          <p-select placeholder="Producto"/>
-          <p-select placeholder="Año"/>
-          <p-select placeholder="Mes"/>
-          <p-select placeholder="Moneda"/>
-        </div>
-      </ng-template>
-    </p-toolbar>
-  </header>
+	<header class="mb-xl">
+		<h2 class="fs-xl font-weight-semi-bold mb-md">Proceso de Generación de Reservas Matemáticas</h2>
+	</header>
 
-  <p-tabs value="0"
-          scrollable>
-    <p-tablist>
-      <p-tab value="0">
-        1. Generación de información
-      </p-tab>
-      <p-tab value="1">
-        2. Generación de interfaces de reservas y cesión
-      </p-tab>
-      <p-tab value="2">
-        3. Proceso de retroalimentación
-      </p-tab>
-      <p-tab value="3">
-        4. Resultado de cierre
-      </p-tab>
-      <p-tab value="4">
-        5. Registro y conciliación contable
-      </p-tab>
-      <p-tab value="5">
-        6. Reportes post cierre
-      </p-tab>
-    </p-tablist>
-    <p-tabpanels>
-      <p-tabpanel value="0">
-        @defer {
-          <app-gen-info/>
-        }
-      </p-tabpanel>
-      <p-tabpanel value="1">
-        @defer {
-          <app-gen-reservation-interfaces/>
-        }
-      </p-tabpanel>
-      <p-tabpanel value="2">
-        @defer {
-          <app-feedback-process/>
-        }
-      </p-tabpanel>
-      <p-tabpanel value="3">
-        @defer {
-          <app-closing-result/>
-        }
-      </p-tabpanel>
-      <p-tabpanel value="4">
-        @defer {
-          <app-accounting-reconciliation/>
-        }
-      </p-tabpanel>
-      <p-tabpanel value="5">
-        @defer {
-          <app-closing-reports/>
-        }
-      </p-tabpanel>
-    </p-tabpanels>
-  </p-tabs>
+	<p-tabs value="0" (valueChange)="tabChange($event)" scrollable>
+		<p-tablist>
+			<p-tab value="0">
+				1. Generación de información
+			</p-tab>
+			<p-tab value="1">
+				2. Generación de interfaces de reservas y cesión
+			</p-tab>
+			<p-tab value="2">
+				3. Proceso de retroalimentación
+			</p-tab>
+			<p-tab value="3">
+				4. Resultado de cierre
+			</p-tab>
+			<p-tab value="4">
+				5. Registro y conciliación contable
+			</p-tab>
+			<p-tab value="5">
+				6. Reportes post cierre
+			</p-tab>
+		</p-tablist>
+	</p-tabs>
+
+	<div class="reservation__content gap-md mt-md">
+		<div class="panel-menu">
+			<p-panelMenu [model]="menu()"></p-panelMenu>
+		</div>
+
+		<div class="reservation__content__body">
+			<router-outlet/>
+		</div>
+	</div>
 </main>

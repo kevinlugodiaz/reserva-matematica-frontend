@@ -4,9 +4,9 @@ import { RouterOutlet } from '@angular/router';
 @Component({
   selector: 'app-intranet',
   imports: [RouterOutlet],
+  standalone: true,
   templateUrl: './intranet.component.html',
   styleUrl: './intranet.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export default class IntranetComponent {
-}
+export default class IntranetComponent {}

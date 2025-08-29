@@ -1,13 +1,54 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>ReservaMatematicaFrontend</title>
-  <base href="/">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-</head>
-<body>
-  <app-root></app-root>
-</body>
+	<head>
+		<meta charset="utf-8">
+		<title>Reservas Matemáticas</title>
+		<base href="/">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="icon" type="image/x-icon" href="/favicon.ico">
+
+		<style>
+			@keyframes pulse {
+				0% {
+					transform: scale(1);
+				}
+				100% {
+					transform: scale(1.1);
+				}
+			}
+
+			#splash-screen {
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background-color: #fff;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				flex-direction: column;
+				z-index: 99;
+				transition: 0.2s ease-in-out;
+				user-select: none;
+
+				.splash-screen__logo {
+					width: 60px;
+					height: auto;
+					margin-bottom: 1rem;
+					border-radius: 4px;
+					animation: pulse 0.5s infinite ease-in-out alternate;
+					transition: 0.2s;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<div id="splash-screen" class="splash-screen">
+			<div class="splash-screen__item">
+				<img src="/resources/isotipo.webp" alt="Reservas Matemáticas Logo" class="splash-screen__logo">
+			</div>
+		</div>
+		<app-root></app-root>
+	</body>
 </html>

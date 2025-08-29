@@ -1,0 +1,145 @@
+@use "../mixins/font-family";
+
+p-button {
+	.p-button:not(.p-button-secondary,.p-button-text) .p-button-label,
+	.p-button:not(.p-button-secondary,.p-button-text) .p-button-icon {
+		color: var(--white-color-base) !important;
+	}
+
+	.p-button {
+		&-sm {
+			.p-button-label {
+				font-size: var(--font-size-sm) !important;
+			}
+		}
+	}
+
+	&.button-min-width {
+		.p-button {
+			min-width: 140px;
+		}
+	}
+
+	&.button-excel {
+		button {
+			background-color: #107c41 !important;
+			border: 1px solid #107c41 !important;
+
+			&:hover {
+				background-color: #0d7239 !important;
+			}
+
+			&:active {
+				background-color: #185c37 !important;
+			}
+
+			.p-button-label {
+				color: var(--white-color-base);
+			}
+		}
+	}
+}
+
+.p-tooltip {
+	font-size: 13px !important;
+
+	&.input-tooltip {
+		max-width: 360px !important;
+	}
+
+	&-text {
+		padding: 10px 12px !important;
+		border-radius: 8px !important;
+		line-height: 1.1 !important;
+		text-align: center;
+		@include font-family.base;
+	}
+}
+
+.p-datatable {
+	&-table {
+		thead tr {
+			background-color: var(--blue-color-500);
+
+			th {
+				background-color: transparent;
+				font-weight: var(--font-weight-base);
+
+				&,
+				&:not(.p-datatable-column-sorted) * {
+					color: var(--white-color-base);
+				}
+
+				&.p-datatable-sortable-column:not(.p-datatable-column-sorted) {
+					&:hover {
+						&,
+						& * {
+							color: var(--blue-color-500);
+						}
+					}
+				}
+			}
+		}
+
+		thead tr th,
+		tbody tr td {
+			padding: var(--spacing-xs) var(--spacing-sm) !important;
+			font-size: var(--font-size-sm) !important;
+		}
+
+	}
+
+	&-header {
+		padding: 0 !important;
+		padding-bottom: var(--spacing-md) !important;
+	}
+
+	&-tbody {
+		tr:last-child td {
+			border-bottom: none !important;
+		}
+	}
+
+	&-tfoot {
+		tr td {
+			border: none !important;
+		}
+	}
+}
+
+p-tabs {
+	.p-tablist-active-bar {
+		height: 2px;
+	}
+
+	.p-tab {
+		font-weight: var(--font-weight-semi-bold) !important;
+		font-size: var(--font-size-sm) !important;
+		padding: .75rem 1rem !important;
+
+		&-active {
+			// background-color: var(--blue-color-500);
+			color: var(--blue-color-500);
+		}
+	}
+
+	.p-tabpanels {
+		padding: var(--spacing-md) 0 0 0 !important;
+	}
+}
+
+p-select {
+	.p-select-option {
+		&:hover {
+			background-color: var(--blue-color-50) !important;
+		}
+	}
+
+	.p-select-option-selected {
+		background-color: var(--blue-color-50) !important;
+
+		span {
+			color: var(--black-color-base) !important;
+		}
+	}
+}

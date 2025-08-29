@@ -1,0 +1,40 @@
+<div class="gen-report">
+	<span class="font-weight-semi-bold fs-xl mb-md block">Generar reporte - {{ periodLabel() }}</span>
+	<table class="mb-md">
+		<tr>
+			<td class="font-weight-semi-bold">Estado</td>
+			<td>
+				:
+				<p-tag [severity]="existFile() ? 'success' : 'secondary'"
+				       [value]="existFile() ? 'Finalizado' : 'Procesando'"></p-tag>
+			</td>
+		</tr>
+		<tr>
+			<td class="font-weight-semi-bold">Responsable</td>
+			<td>
+				: Consultor actuarial - Héctor
+			</td>
+		</tr>
+		<tr>
+			<td class="font-weight-semi-bold">Fecha de estado</td>
+			<td>
+				: 05/08/2024 - 14:00
+			</td>
+		</tr>
+	</table>
+	<div class="flex gap-md">
+		<p-button severity="primary" label="Reprocesar" icon="bi bi-arrow-clockwise" disabled/>
+		<p-button severity="primary"
+		          class="button-excel"
+		          [label]="!existFile() ? 'Generando reporte' : 'Exportar'"
+		          icon="bi bi-file-excel"
+		          [loading]="!existFile()"
+		          [disabled]="!existFile()"
+		          (click)="downloadFile()"/>
+		<p-button severity="primary"
+		          label="Continuar"
+		          icon="bi bi-arrow-right"
+		          iconPos="right"
+		          disabled/>
+	</div>
+</div>

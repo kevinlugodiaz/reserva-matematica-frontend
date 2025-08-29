@@ -14,6 +14,30 @@
   margin-bottom: var(--spacing-xl);
 }
 
+.ml-xs {
+  margin-left: var(--spacing-xs);
+}
+
+.ml-md {
+  margin-left: var(--spacing-md);
+}
+
+.ml-xl {
+  margin-left: var(--spacing-xl);
+}
+
+.mr-xs {
+  margin-right: var(--spacing-xs);
+}
+
+.mr-md {
+  margin-right: var(--spacing-md);
+}
+
+.mr-xl {
+  margin-right: var(--spacing-xl);
+}
+
 .mx-auto {
   margin-left: auto;
   margin-right: auto;
@@ -103,4 +127,28 @@
 .py-xxl {
   padding-top: var(--spacing-xxl);
   padding-bottom: var(--spacing-xxl);
+}
+
+.pl-xs {
+	padding-left: var(--spacing-xs);
+}
+
+.pl-md {
+	padding-left: var(--spacing-md);
+}
+
+.pl-xl {
+	padding-left: var(--spacing-xl);
+}
+
+.pr-xs {
+	padding-right: var(--spacing-xs);
+}
+
+.pr-md {
+	padding-right: var(--spacing-md);
+}
+
+.pr-xl {
+	padding-right: var(--spacing-xl);
 }

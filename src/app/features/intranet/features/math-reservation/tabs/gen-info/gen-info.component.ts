@@ -1,16 +1,12 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { Tab, TabList, Tabs } from 'primeng/tabs';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-gen-info',
-  imports: [
-    Tabs,
-    TabList,
-    Tab
-  ],
+  imports: [RouterOutlet],
+  standalone: true,
   templateUrl: './gen-info.component.html',
   styleUrl: './gen-info.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export default class GenInfoComponent {
-}
+export default class GenInfoComponent {}

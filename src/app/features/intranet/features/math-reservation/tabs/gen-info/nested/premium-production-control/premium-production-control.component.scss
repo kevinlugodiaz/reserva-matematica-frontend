@@ -1,0 +1,22 @@
+.premium-production-control {
+	.row-gray {
+		background-color: var(--gray-200) !important;
+
+		td {
+			&:not(:last-child) {
+				border-right: 1px solid var(--white-color-base) !important;
+			}
+		}
+	}
+
+	tfoot {
+		.row-gray {
+			td {
+				font-size: var(--font-size-sm);
+				padding: 8px 12px;
+				border-top: 1px solid var(--white-color-base) !important;
+				background-color: transparent;
+			}
+		}
+	}
+}

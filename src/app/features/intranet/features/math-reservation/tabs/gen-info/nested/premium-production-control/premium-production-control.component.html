@@ -1,0 +1,72 @@
+<section class="premium-production-control">
+	<span class="font-weight-semi-bold fs-xl mb-md block">Control de producción de primas - Julio 2025</span>
+	<table class="mb-md">
+		<tbody>
+			<tr>
+				<td>Fecha de Generación Reporte</td>
+				<td class="text-right pl-xl">08/08/2025</td>
+			</tr>
+			<tr>
+				<td>Fecha Cierre</td>
+				<td class="text-right pl-xl">31/07/2025</td>
+			</tr>
+			<tr>
+				<td>Tipo de cambio - Fecha de cierre</td>
+				<td class="text-right pl-xl">3.54</td>
+			</tr>
+			<tr>
+				<td>Cifras expresadas en</td>
+				<td class="text-right pl-xl">Soles</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<p-table [value]="items()"
+	         showGridlines
+	         rowGroupMode="subheader"
+	         groupRowsBy="label">
+		<ng-template pTemplate="header">
+			<tr>
+				<th>Prestación</th>
+				<th class="text-center">Moneda</th>
+				<th class="text-right">Prima emitida</th>
+				<th class="text-right">Prima Contabilidad</th>
+				<th class="text-right">Prima Diferencia</th>
+			</tr>
+		</ng-template>
+		<ng-template pTemplate="body" let-item let-rowIndex="rowIndex">
+			<tr>
+				@if (shouldRenderGroupLabel(item, rowIndex)) {
+					<td rowspan="2">{{ item.label }}</td>
+				}
+				<td class="text-center">{{ item.currency }}</td>
+				<td class="text-right">{{ item.premium | number: "1.2-2" }}</td>
+				<td class="text-right">{{ item.accounting | number: "1.2-2" }}</td>
+				<td class="text-right">{{ item.diff | number: "1.2-2" }}</td>
+			</tr>
+		</ng-template>
+		<ng-template pTemplate="groupfooter" let-item>
+			<tr class="row-gray">
+				<td>Sub Total</td>
+				<td class="text-center">Soles</td>
+				<td class="text-right">{{ 108000 | number: "1.2-2" }}</td>
+				<td class="text-right">{{ 108000 | number: "1.2-2" }}</td>
+				<td class="text-right">{{ 0 | number: "1.2-2" }}</td>
+			</tr>
+		</ng-template>
+		<ng-template pTemplate="footer" let-item>
+			<tr class="row-gray">
+				<td>Total</td>
+				<td class="text-center">Soles</td>
+				<td class="text-right">{{ 1080030 | number: "1.2-2" }}</td>
+				<td class="text-right">{{ 1080020 | number: "1.2-2" }}</td>
+				<td class="text-right">{{ 0 | number: "1.2-2" }}</td>
+			</tr>
+		</ng-template>
+	</p-table>
+	<div class="flex gap-md mt-md">
+		<p-button severity="primary" label="Regenerar" icon="bi bi-arrow-clockwise"/>
+		<p-button class="button-excel" label="Exportar" icon="bi bi-file-excel"/>
+		<p-button severity="primary" label="Continuar" icon="bi bi-arrow-right" iconPos="right"/>
+	</div>
+</section>
