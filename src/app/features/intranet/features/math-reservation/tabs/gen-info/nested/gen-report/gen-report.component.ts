@@ -65,7 +65,7 @@ export default class GenReportComponent implements OnInit {
 
   async downloadFile() {
     const file = await this.genReportService.getReport(this.period());
-    this.descargarBlob(file, `reporte-${this.period()}.xls`);
+    this.descargarBlob(file, `reporte-${this.period()}.xlsx`);
   }
 
   descargarBlob(blob: Blob, nombreArchivo: string): void {
