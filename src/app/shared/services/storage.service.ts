@@ -3,7 +3,7 @@ import SimpleCrypto from 'simple-crypto-js';
 
 @Injectable({ providedIn: 'root' })
 export class StorageService {
-  private readonly crypto = new SimpleCrypto('');
+  private readonly crypto = new SimpleCrypto('Secret$Data');
 
   set<T>(key: string, value: T) {
     const data = JSON.stringify(value);
@@ -16,10 +16,9 @@ export class StorageService {
     if (!item) return undefined;
 
     try {
-      const data = this.crypto.decrypt(item) as string;
-      const parsed = JSON.parse(data) as T;
-      console.log(key, parsed);
-      return parsed;
+      const data = this.crypto.decrypt(item) as T;
+      console.log(key, data);
+      return data;
     } catch (e) {
 			console.error(e);
       return undefined;

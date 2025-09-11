@@ -8,6 +8,10 @@ import { IntranetRoutes } from '../../shared/enums/intranet-routes.enum';
 import { MathReservationRoutes } from './shared/enums/math-reservation-routes.enum';
 import { GenInfoRoutes } from './tabs/gen-info/shared/enums/gen-info.routes';
 import { AppRoutes } from '@shared/enums/app-routes.enums';
+import { ProcessStore } from '@intranet/shared/store/process.store';
+import { StageProcess } from '@intranet/shared/enums/stage-process.enum';
+import { BlockProcess } from '@intranet/shared/enums/block-process.enum';
+import { ProcessStatusModel } from '@intranet/shared/models/process-status.model';
 
 @Component({
   selector: 'app-math-reservation',
@@ -20,6 +24,7 @@ import { AppRoutes } from '@shared/enums/app-routes.enums';
 })
 export default class MathReservationComponent {
   private readonly router = inject(Router);
+  private readonly processStore = inject(ProcessStore);
 
   private readonly basePath = `/${AppRoutes.intranet}/${IntranetRoutes.mathReservation}`;
   private readonly tabPaths: Record<string, string> = {
@@ -41,22 +46,24 @@ export default class MathReservationComponent {
       items: [
         this.buildMenuItem(
           'Generar reporte (Foto del mes)',
-          'success',
+          this.validateCheckStage(this.processStore.data()?.status, BlockProcess.GenInfo, StageProcess.GenReport)
+            ? 'success'
+            : null,
           MathReservationRoutes.genInfo,
           GenInfoRoutes.genReport,
         ),
         this.buildMenuItem(
           'Control de producción de primas',
-	        null,
+          null,
           MathReservationRoutes.genInfo,
           GenInfoRoutes.premiumProductionControl,
         ),
-	      this.buildMenuItem(
-		      'Reglas de Validación',
-		      null,
-		      MathReservationRoutes.genInfo,
-		      GenInfoRoutes.validationReportGen,
-	      ),
+        this.buildMenuItem(
+          'Reglas de Validación',
+          null,
+          MathReservationRoutes.genInfo,
+          GenInfoRoutes.validationReportGen,
+        ),
         this.buildMenuItem(
           'Control de cambio de datos',
           null,
@@ -96,6 +103,20 @@ export default class MathReservationComponent {
       label: '6. Reportes post cierre',
     },
   ]);
+
+  validateCheckStage(currentStatus: ProcessStatusModel | undefined, block: BlockProcess, stage: StageProcess): boolean {
+    if (!currentStatus) {
+      return false;
+    }
+
+    const status = Number(`${currentStatus.block}${currentStatus.stage}`);
+    const ref = Number(`${block}${stage}`);
+
+    console.log(status);
+    console.log(ref);
+
+    return status > ref;
+  }
 
   validateRoute(originPath: string, path: string): string {
     const fullPath = `${this.basePath}/${originPath}/${path}`;

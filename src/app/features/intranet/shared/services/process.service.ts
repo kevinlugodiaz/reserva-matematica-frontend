@@ -6,7 +6,7 @@ import { BlockProcess } from '../enums/block-process.enum';
 import { StageProcess } from '../enums/stage-process.enum';
 import { ProcessStatusResponse } from '../interfaces/process-status-response.interface';
 import { SyncProcessRequest } from '../interfaces/sync-process.interface';
-import { ApiResponse } from '@core/interfaces/api-response.interface';
+import { ApproveStageRequest } from '@intranet/shared/interfaces/approve-stage.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -15,12 +15,14 @@ export class ProcessService {
   private readonly apiService = inject(ApiService);
 
   syncProcess(payload: SyncProcessRequest) {
-    return this.apiService.post<ApiResponse<boolean>, SyncProcessRequest>('sync', payload);
+    return this.apiService.post<boolean, SyncProcessRequest>('sync', payload);
   }
 
-  getStatus(productId: ProductCode, period: string, block: BlockProcess, stage: StageProcess) {
-	  console.log(block);
-	  console.log(stage);
+  approveStage(payload: ApproveStageRequest) {
+    return this.apiService.post<ProcessStatusResponse, ApproveStageRequest>('process/approve', payload);
+  }
+
+  getStatus(productId: ProductCode, period: string) {
     return this.apiService.get<ProcessStatusResponse>(`process/status/${productId}/${period}`);
   }
 

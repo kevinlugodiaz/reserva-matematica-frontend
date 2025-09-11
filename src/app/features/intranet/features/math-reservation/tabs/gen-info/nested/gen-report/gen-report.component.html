@@ -5,7 +5,9 @@
 			<td class="font-weight-semi-bold">Estado</td>
 			<td>
 				:
-				<p-tag [severity]="processStore.data()?.status?.statusId === ProcessStatus.Completed ? 'success' : 'secondary'"
+				<p-tag [severity]="processStore.data()?.status?.statusId === ProcessStatus.Completed ? 'success' :
+														processStore.data()?.status?.statusId === ProcessStatus.Failed ? 'danger' :
+														processStore.data()?.status?.statusId === ProcessStatus.Disrupted ? 'danger' : 'secondary'"
 				       [value]="processStore.data()?.status?.label || 'Pendiente'"></p-tag>
 			</td>
 		</tr>
@@ -18,32 +20,33 @@
 		<tr>
 			<td class="font-weight-semi-bold">Fecha de estado</td>
 			<td>
-				: 05/08/2024 - 14:00
+				@let initDate = processStore.data()?.status?.startTime;
+				: {{ initDate ? (initDate | date: "dd/MM/yyyy hh:mm:ss a") : '-' }}
 			</td>
 		</tr>
 	</table>
 	<div class="flex gap-md">
-		@if (processStore.data()?.status?.statusId === ProcessStatus.Completed) {
-			<p-button severity="primary" label="Reprocesar" icon="bi bi-arrow-clockwise" (click)="syncProcess()"/>
-		} @else {
+		@if (processStore.data()?.status?.statusId !== ProcessStatus.Completed) {
 			<p-button severity="primary"
-			          label="Generar"
+			          [label]="processStore.isLoading() ? 'Cargando' : 'Generar'"
 			          icon="bi bi-arrow-clockwise"
-			          [loading]="processStore.data()?.status?.statusId !== ProcessStatus.Completed"
+			          [loading]="processStore.isLoading()"
 			          (click)="syncProcess()"/>
 		}
 
 		<p-button severity="primary"
 		          class="button-excel"
-		          [label]="processStore.data()?.status?.statusId === ProcessStatus.Completed ? 'Exportar' : 'Generando reporte'"
+		          [label]="!processStore.data()?.status?.statusId || (processStore.data()?.status?.statusId === ProcessStatus.Completed) ? 'Exportar' : 'Generando reporte'"
 		          icon="bi bi-file-excel"
-		          [loading]="processStore.data()?.status?.statusId !== ProcessStatus.Completed"
+		          [loading]="processStore.isLoading()"
 		          [disabled]="processStore.data()?.status?.statusId !== ProcessStatus.Completed"
 		          (click)="downloadFile()"/>
+
 		<p-button severity="primary"
 		          label="Continuar"
 		          icon="bi bi-arrow-right"
 		          iconPos="right"
-		          disabled/>
+		          [disabled]="processStore.data()?.status?.statusId !== ProcessStatus.Completed"
+		          (click)="approve()"/>
 	</div>
 </div>

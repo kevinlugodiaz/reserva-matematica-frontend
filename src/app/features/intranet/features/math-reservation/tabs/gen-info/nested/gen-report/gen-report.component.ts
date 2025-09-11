@@ -1,32 +1,29 @@
-import {
-  ApplicationRef,
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  effect,
-  inject,
-  OnInit,
-  signal,
-} from '@angular/core';
+import { ApplicationRef, ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
 import { Button } from 'primeng/button';
 import { Tag } from 'primeng/tag';
-import { GenReportService } from './shared/services/gen-report.service';
 import { ProcessStore } from '@intranet/shared/store/process.store';
 import { ProductCode } from '@shared/enums/branch-code.enum';
 import { ProcessStatus } from '@intranet/shared/enums/process-status.enum';
 import { BlockProcess } from '@intranet/shared/enums/block-process.enum';
 import { StageProcess } from '@intranet/shared/enums/stage-process.enum';
+import { filter, first } from 'rxjs';
+import { DatePipe } from '@angular/common';
+import { RouterService } from '@shared/services/router.service';
+import { GenInfoRoutes } from '@intranet/features/math-reservation/tabs/gen-info/shared/enums/gen-info.routes';
+import { MathReservationRoutes } from '@intranet/features/math-reservation/shared/enums/math-reservation-routes.enum';
+import { IntranetRoutes } from '@intranet/shared/enums/intranet-routes.enum';
 
 @Component({
   selector: 'app-gen-report',
-  imports: [Button, Tag],
+  imports: [Button, Tag, DatePipe],
   templateUrl: './gen-report.component.html',
   styleUrl: './gen-report.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class GenReportComponent implements OnInit {
   readonly processStore = inject(ProcessStore);
-  private readonly genReportService = inject(GenReportService);
+  private readonly appRef = inject(ApplicationRef);
+  private readonly router = inject(RouterService);
 
   private readonly monthLabel = {
     '01': 'Enero',
@@ -51,30 +48,20 @@ export default class GenReportComponent implements OnInit {
     return `${this.monthLabel[month as keyof typeof this.monthLabel]} ${year}`;
   });
 
-  constructor() {
-    const interval = setInterval(() => {
-      this.processStore.getStatus({
-        period: this.period(),
-        productId: ProductCode.RentaVitalicia,
-        block: BlockProcess.GenInfo,
-        stage: StageProcess.GenReport,
-      });
-    }, 7000);
-
-    effect(() => {
-      if (this.processStore.data()?.status?.statusId === ProcessStatus.Completed) {
-        clearInterval(interval);
-      }
-    });
-  }
-
   ngOnInit() {
-    this.processStore.getStatus({
-      period: this.period(),
-      productId: ProductCode.RentaVitalicia,
-      block: BlockProcess.GenInfo,
-      stage: StageProcess.GenReport,
-    });
+    this.appRef.isStable
+      .pipe(
+        filter((stable) => stable),
+        first(),
+      )
+      .subscribe(() => {
+        this.processStore.getStatus({
+          period: this.period(),
+          productId: ProductCode.RentaVitalicia,
+          block: BlockProcess.GenInfo,
+          stage: StageProcess.GenReport,
+        });
+      });
   }
 
   syncProcess() {
@@ -82,6 +69,14 @@ export default class GenReportComponent implements OnInit {
       period: this.period(),
       productId: ProductCode.RentaVitalicia,
     });
+    setTimeout(() => {
+      this.processStore.getStatus({
+        period: this.period(),
+        productId: ProductCode.RentaVitalicia,
+        block: BlockProcess.GenInfo,
+        stage: StageProcess.GenReport,
+      });
+    }, 10000);
   }
 
   async downloadFile() {
@@ -91,5 +86,17 @@ export default class GenReportComponent implements OnInit {
       block: BlockProcess.GenInfo,
       stage: StageProcess.GenReport,
     });
+  }
+
+  async approve() {
+	  await this.processStore.approveAsync({
+		  period: this.period(),
+		  productId: ProductCode.RentaVitalicia,
+		  block: BlockProcess.GenInfo,
+		  stage: StageProcess.PremiumProductionControl,
+	  });
+	  this.router.navigateByUrl(
+		  `/intranet/${IntranetRoutes.mathReservation}/${MathReservationRoutes.genInfo}/${GenInfoRoutes.premiumProductionControl}`,
+	  );
   }
 }
