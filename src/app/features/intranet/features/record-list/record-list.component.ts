@@ -1,12 +1,13 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { DatePipe } from '@angular/common';
 import { Button } from 'primeng/button';
 import { Tooltip } from 'primeng/tooltip';
 import { Tag } from 'primeng/tag';
 import { Select } from 'primeng/select';
-import { Router } from '@angular/router';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+
+import { RouterService } from '@shared/services/router.service';
 
 @Component({
   selector: 'app-record-list',
@@ -17,7 +18,7 @@ import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class RecordListComponent {
-  private readonly router = inject(Router);
+  private readonly router = inject(RouterService);
   private readonly builder = inject(FormBuilder);
 
   yearControl = this.builder.control<number | null>(null);
@@ -112,6 +113,6 @@ export default class RecordListComponent {
 
   goToGenReport() {
     localStorage.setItem('period', `${this.yearControl.value}${this.monthControl.value!.toString().padStart(2, '0')}`);
-    this.router.navigate(['/intranet/new-period']);
+    this.router.navigateByUrl('/intranet/new-period');
   }
 }

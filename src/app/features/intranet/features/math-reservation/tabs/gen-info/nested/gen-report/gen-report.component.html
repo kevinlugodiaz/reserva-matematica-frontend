@@ -5,8 +5,8 @@
 			<td class="font-weight-semi-bold">Estado</td>
 			<td>
 				:
-				<p-tag [severity]="existFile() ? 'success' : 'secondary'"
-				       [value]="existFile() ? 'Finalizado' : 'Procesando'"></p-tag>
+				<p-tag [severity]="processStore.data()?.status?.statusId === ProcessStatus.Completed ? 'success' : 'secondary'"
+				       [value]="processStore.data()?.status?.label || 'Pendiente'"></p-tag>
 			</td>
 		</tr>
 		<tr>
@@ -23,13 +23,22 @@
 		</tr>
 	</table>
 	<div class="flex gap-md">
-		<p-button severity="primary" label="Reprocesar" icon="bi bi-arrow-clockwise" disabled/>
+		@if (processStore.data()?.status?.statusId === ProcessStatus.Completed) {
+			<p-button severity="primary" label="Reprocesar" icon="bi bi-arrow-clockwise" (click)="syncProcess()"/>
+		} @else {
+			<p-button severity="primary"
+			          label="Generar"
+			          icon="bi bi-arrow-clockwise"
+			          [loading]="processStore.data()?.status?.statusId !== ProcessStatus.Completed"
+			          (click)="syncProcess()"/>
+		}
+
 		<p-button severity="primary"
 		          class="button-excel"
-		          [label]="!existFile() ? 'Generando reporte' : 'Exportar'"
+		          [label]="processStore.data()?.status?.statusId === ProcessStatus.Completed ? 'Exportar' : 'Generando reporte'"
 		          icon="bi bi-file-excel"
-		          [loading]="!existFile()"
-		          [disabled]="!existFile()"
+		          [loading]="processStore.data()?.status?.statusId !== ProcessStatus.Completed"
+		          [disabled]="processStore.data()?.status?.statusId !== ProcessStatus.Completed"
 		          (click)="downloadFile()"/>
 		<p-button severity="primary"
 		          label="Continuar"

@@ -1,8 +1,21 @@
-import { ApplicationRef, ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
+import {
+  ApplicationRef,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  inject,
+  OnInit,
+  signal,
+} from '@angular/core';
 import { Button } from 'primeng/button';
 import { Tag } from 'primeng/tag';
 import { GenReportService } from './shared/services/gen-report.service';
-import { filter, first, interval, switchMap, take, tap, timer } from 'rxjs';
+import { ProcessStore } from '@intranet/shared/store/process.store';
+import { ProductCode } from '@shared/enums/branch-code.enum';
+import { ProcessStatus } from '@intranet/shared/enums/process-status.enum';
+import { BlockProcess } from '@intranet/shared/enums/block-process.enum';
+import { StageProcess } from '@intranet/shared/enums/stage-process.enum';
 
 @Component({
   selector: 'app-gen-report',
@@ -12,10 +25,8 @@ import { filter, first, interval, switchMap, take, tap, timer } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class GenReportComponent implements OnInit {
+  readonly processStore = inject(ProcessStore);
   private readonly genReportService = inject(GenReportService);
-  readonly existFile = signal(false);
-  private readonly appRef = inject(ApplicationRef);
-  private readonly period = signal(localStorage.getItem('period') || '202405');
 
   private readonly monthLabel = {
     '01': 'Enero',
@@ -31,6 +42,8 @@ export default class GenReportComponent implements OnInit {
     '11': 'Noviembre',
     '12': 'Diciembre',
   };
+  readonly ProcessStatus = ProcessStatus;
+  private readonly period = signal(localStorage.getItem('period') || '202405');
 
   readonly periodLabel = computed(() => {
     const year = this.period().substring(0, 4);
@@ -38,44 +51,45 @@ export default class GenReportComponent implements OnInit {
     return `${this.monthLabel[month as keyof typeof this.monthLabel]} ${year}`;
   });
 
-  ngOnInit() {
-    timer(800)
-      .pipe(
-        switchMap(() => this.appRef.isStable),
-        filter((stable) => stable),
-        first(),
-      )
-      .subscribe(() => {
-        this.exportData(this.period());
+  constructor() {
+    const interval = setInterval(() => {
+      this.processStore.getStatus({
+        period: this.period(),
+        productId: ProductCode.RentaVitalicia,
+        block: BlockProcess.GenInfo,
+        stage: StageProcess.GenReport,
       });
+    }, 7000);
+
+    effect(() => {
+      if (this.processStore.data()?.status?.statusId === ProcessStatus.Completed) {
+        clearInterval(interval);
+      }
+    });
   }
 
-  exportData(period: string) {
-    // this.excelService.exportData(this.dummy, 'dummy-data');
+  ngOnInit() {
+    this.processStore.getStatus({
+      period: this.period(),
+      productId: ProductCode.RentaVitalicia,
+      block: BlockProcess.GenInfo,
+      stage: StageProcess.GenReport,
+    });
+  }
 
-    interval(5000)
-      .pipe(
-        switchMap(() => this.genReportService.existFile(period)),
-        tap((res) => this.existFile.set(res)),
-        filter((res) => res),
-        take(1),
-      )
-      .subscribe();
+  syncProcess() {
+    this.processStore.syncProcess({
+      period: this.period(),
+      productId: ProductCode.RentaVitalicia,
+    });
   }
 
   async downloadFile() {
-    const file = await this.genReportService.getReport(this.period());
-    this.descargarBlob(file, `reporte-${this.period()}.xlsx`);
-  }
-
-  descargarBlob(blob: Blob, nombreArchivo: string): void {
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = nombreArchivo;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    window.URL.revokeObjectURL(url);
+    this.processStore.getFile({
+      productId: ProductCode.RentaVitalicia,
+      period: this.period(),
+      block: BlockProcess.GenInfo,
+      stage: StageProcess.GenReport,
+    });
   }
 }

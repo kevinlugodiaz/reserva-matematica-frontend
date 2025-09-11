@@ -1,0 +1,65 @@
+import { ProductCode } from '@shared/enums/branch-code.enum';
+import { ProcessStatus } from '../enums/process-status.enum';
+import { BlockProcess } from '../enums/block-process.enum';
+import { StageProcess } from '../enums/stage-process.enum';
+import { ProcessStatusResponse } from '../interfaces/process-status-response.interface';
+
+export class ProcessStatusModel {
+  constructor(
+    public id: number,
+    public periodId: string,
+    public productId: ProductCode,
+    public statusId: ProcessStatus,
+		public label: string,
+    public startTime: Date,
+    public endTime: Date | null,
+    public description: string | null,
+    public block: BlockProcess,
+    public stage: StageProcess,
+    public createdAt: Date,
+  ) {}
+
+	/*
+	export enum ProcessStatus {
+  Pending = 0,
+  InProgress = 1,
+  Completed = 2,
+  Failed = 3,
+  Disrupted = 4,
+}
+
+	* */
+
+	static getStatusLabel(code: ProcessStatus): string {
+		switch (code) {
+			case ProcessStatus.Pending:
+				return 'Pendiente';
+			case ProcessStatus.InProgress:
+				return 'En Proceso';
+			case ProcessStatus.Completed:
+				return 'Completado';
+			case ProcessStatus.Failed:
+				return 'Fallido';
+			case ProcessStatus.Disrupted:
+				return 'Interrumpido';
+			default:
+				return 'Desconocido';
+		}
+	}
+
+  static build(payload: ProcessStatusResponse): ProcessStatusModel {
+    return new ProcessStatusModel(
+      payload.id,
+      payload.idPeriodo,
+      payload.idProducto,
+      payload.idEstado,
+			this.getStatusLabel(payload.idEstado),
+      new Date(payload.horaInicio),
+      payload.horaFin ? new Date(payload.horaFin) : null,
+      payload.descripcion,
+      payload.bloque,
+      payload.etapa,
+      new Date(payload.dDregtimestamp),
+    );
+  }
+}
