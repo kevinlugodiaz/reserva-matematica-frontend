@@ -89,14 +89,20 @@ export default class GenReportComponent implements OnInit {
   }
 
   async approve() {
-	  await this.processStore.approveAsync({
-		  period: this.period(),
-		  productId: ProductCode.RentaVitalicia,
-		  block: BlockProcess.GenInfo,
-		  stage: StageProcess.PremiumProductionControl,
-	  });
-	  this.router.navigateByUrl(
-		  `/intranet/${IntranetRoutes.mathReservation}/${MathReservationRoutes.genInfo}/${GenInfoRoutes.premiumProductionControl}`,
-	  );
+    await this.processStore.approveAsync({
+      period: this.period(),
+      productId: ProductCode.RentaVitalicia,
+      block: BlockProcess.GenInfo,
+      stage: StageProcess.PremiumProductionControl,
+    });
+
+    if (this.processStore.isStageCompleted(BlockProcess.GenInfo, StageProcess.GenReport)) {
+      this.router.navigateByUrl(
+        `/intranet/${IntranetRoutes.mathReservation}/${MathReservationRoutes.genInfo}/${GenInfoRoutes.premiumProductionControl}`,
+      );
+    }
   }
+
+  protected readonly BlockProcess = BlockProcess;
+  protected readonly StageProcess = StageProcess;
 }

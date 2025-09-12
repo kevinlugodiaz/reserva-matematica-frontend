@@ -15,7 +15,7 @@ export class ProcessService {
   private readonly apiService = inject(ApiService);
 
   syncProcess(payload: SyncProcessRequest) {
-    return this.apiService.post<boolean, SyncProcessRequest>('sync', payload);
+    return this.apiService.post<ProcessStatusResponse, SyncProcessRequest>('sync', payload);
   }
 
   approveStage(payload: ApproveStageRequest) {

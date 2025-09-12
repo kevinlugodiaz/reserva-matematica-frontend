@@ -1,7 +1,7 @@
-import { getState, patchState, signalStore, withMethods, withState } from '@ngrx/signals';
-import { inject } from '@angular/core';
+import { getState, patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
+import { computed, inject } from '@angular/core';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { catchError, EMPTY, expand, firstValueFrom, from, pipe, switchMap, tap, timer } from 'rxjs';
+import { catchError, EMPTY, expand, firstValueFrom, pipe, switchMap, tap, timer } from 'rxjs';
 
 import { StorageService } from '@shared/services/storage.service';
 import { ProcessService } from '../services/process.service';
@@ -45,7 +45,15 @@ export const ProcessStore = signalStore(
         switchMap((payload: SyncProcessRequest) =>
           processService.syncProcess(payload).pipe(
             tapResponse({
-              next: () => patchState(store, { isLoading: true }),
+              next: (res) => {
+                patchState(store, {
+                  isLoading: true,
+                  data: {
+                    status: ProcessStatusModel.build(res.data),
+                  },
+                });
+                storageService.set('process', getState(store));
+              },
               error: (error) => {
                 console.log(error);
                 patchState(store, { isLoading: false });
@@ -65,16 +73,19 @@ export const ProcessStore = signalStore(
               const isCompleted =
                 response.data?.idEstado === ProcessStatus.Completed ||
                 response.data?.idEstado === ProcessStatus.Disrupted ||
-                response.data?.idEstado === ProcessStatus.Failed;
+                response.data?.idEstado === ProcessStatus.Failed ||
+                response.data?.idEstado === ProcessStatus.Pending;
+              console.log('aqui1');
               return isCompleted
                 ? EMPTY
-                : timer(7000).pipe(switchMap(() => processService.getStatus(productId, period)));
+                : timer(10000).pipe(switchMap(() => processService.getStatus(productId, period)));
             }),
             tap((response) => {
               const isCompleted =
                 response.data?.idEstado === ProcessStatus.Completed ||
                 response.data?.idEstado === ProcessStatus.Disrupted ||
-                response.data?.idEstado === ProcessStatus.Failed;
+                response.data?.idEstado === ProcessStatus.Failed ||
+                response.data?.idEstado === ProcessStatus.Pending;
               patchState(store, {
                 isLoading: !isCompleted,
                 data: {
@@ -112,15 +123,34 @@ export const ProcessStore = signalStore(
     ),
     approveAsync: async (req: ApproveStageRequest) => {
       patchState(store, { isLoading: true });
-      const res = await firstValueFrom(processService.approveStage(req));
-      patchState(store, {
-        isLoading: false,
-        data: {
-          status: ProcessStatusModel.build(res.data),
-        },
-      });
-      patchState(store, { isLoading: false });
-      storageService.set('process', getState(store));
+      try {
+        const res = await firstValueFrom(processService.approveStage(req));
+        patchState(store, {
+          isLoading: false,
+          data: {
+            status: ProcessStatusModel.build(res.data),
+          },
+        });
+        storageService.set('process', getState(store));
+      } catch (error) {
+        console.log(error);
+        patchState(store, { isLoading: false });
+      }
     },
+    isStageCompleted: (block: BlockProcess, stage: StageProcess) => {
+      const state = getState(store);
+      const status = state.data?.status;
+
+      if (!status) {
+        return false;
+      }
+
+      const statusConcat = Number(`${status.block}${status.stage}`);
+      const ref = Number(`${block}${stage}`);
+      return statusConcat > ref;
+    },
+  })),
+  withComputed((store) => ({
+    getProcessStatus: computed(() => store.data()?.status),
   })),
 );

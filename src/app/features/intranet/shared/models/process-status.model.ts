@@ -6,7 +6,7 @@ import { ProcessStatusResponse } from '../interfaces/process-status-response.int
 
 export class ProcessStatusModel {
   constructor(
-    public id: number,
+    public id: number | undefined,
     public periodId: string,
     public productId: ProductCode,
     public statusId: ProcessStatus,
@@ -18,17 +18,6 @@ export class ProcessStatusModel {
     public stage: StageProcess,
     public createdAt: Date,
   ) {}
-
-	/*
-	export enum ProcessStatus {
-  Pending = 0,
-  InProgress = 1,
-  Completed = 2,
-  Failed = 3,
-  Disrupted = 4,
-}
-
-	* */
 
 	static getStatusLabel(code: ProcessStatus): string {
 		switch (code) {

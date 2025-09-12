@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal, ViewEncapsulation } from '@angular/core';
+import {
+	ChangeDetectionStrategy,
+	Component,
+	computed,
+	inject,
+	signal,
+	ViewEncapsulation
+} from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { PanelMenu } from 'primeng/panelmenu';
 import { Router, RouterOutlet } from '@angular/router';
@@ -11,7 +18,6 @@ import { AppRoutes } from '@shared/enums/app-routes.enums';
 import { ProcessStore } from '@intranet/shared/store/process.store';
 import { StageProcess } from '@intranet/shared/enums/stage-process.enum';
 import { BlockProcess } from '@intranet/shared/enums/block-process.enum';
-import { ProcessStatusModel } from '@intranet/shared/models/process-status.model';
 
 @Component({
   selector: 'app-math-reservation',
@@ -38,85 +44,71 @@ export default class MathReservationComponent {
 
   currentPath = signal<string>(this.router.url);
   menu = computed(() => [
-    {
-      label: '1. Generación de Información',
-      icon: 'bi-dash-circle-fill',
-      expanded: this.currentPath().includes(MathReservationRoutes.genInfo),
-      command: () => this.navigate([this.basePath, MathReservationRoutes.genInfo, GenInfoRoutes.genReport].join('/')),
-      items: [
-        this.buildMenuItem(
-          'Generar reporte (Foto del mes)',
-          this.validateCheckStage(this.processStore.data()?.status, BlockProcess.GenInfo, StageProcess.GenReport)
-            ? 'success'
-            : null,
-          MathReservationRoutes.genInfo,
-          GenInfoRoutes.genReport,
-        ),
-        this.buildMenuItem(
-          'Control de producción de primas',
-          null,
-          MathReservationRoutes.genInfo,
-          GenInfoRoutes.premiumProductionControl,
-        ),
-        this.buildMenuItem(
-          'Reglas de Validación',
-          null,
-          MathReservationRoutes.genInfo,
-          GenInfoRoutes.validationReportGen,
-        ),
-        this.buildMenuItem(
-          'Control de cambio de datos',
-          null,
-          MathReservationRoutes.genInfo,
-          GenInfoRoutes.dataChangeControl,
-        ),
-        this.buildMenuItem('Control de pagos', null, MathReservationRoutes.genInfo, GenInfoRoutes.paymentControl),
-        this.buildMenuItem(
-          'Métricas adicionales',
-          null,
-          MathReservationRoutes.genInfo,
-          GenInfoRoutes.additionalMetrics,
-        ),
-        this.buildMenuItem(
-          'Generación de Reportes de Validación',
-          null,
-          MathReservationRoutes.genInfo,
-          GenInfoRoutes.validationReportGen,
-        ),
-      ],
-    },
-    {
-      label: '2. Generación de Interfaces de Reservas',
-      routerLink: [this.basePath, MathReservationRoutes.genReservationInterfaces],
-      expanded: this.currentPath().includes(MathReservationRoutes.genReservationInterfaces),
-    },
-    {
-      label: '3. Proceso de Retroalimentación',
-    },
-    {
-      label: '4. Resultados de Cierre',
-    },
-    {
-      label: '5. Registro y Conciliación Contable',
-    },
-    {
-      label: '6. Reportes post cierre',
-    },
+	  {
+		  label: '1. Generación de Información',
+		  icon: 'bi-dash-circle-fill',
+		  expanded: this.currentPath().includes(MathReservationRoutes.genInfo),
+		  command: () => this.navigate([this.basePath, MathReservationRoutes.genInfo, GenInfoRoutes.genReport].join('/')),
+		  items: [
+			  this.buildMenuItem(
+				  'Generar reporte (Foto del mes)',
+				  this.processStore.isStageCompleted(BlockProcess.GenInfo, StageProcess.GenReport) ? 'success' : null,
+				  MathReservationRoutes.genInfo,
+				  GenInfoRoutes.genReport,
+			  ),
+			  this.buildMenuItem(
+				  'Control de producción de primas',
+				  this.processStore.isStageCompleted(BlockProcess.GenInfo, StageProcess.PremiumProductionControl)
+					  ? 'success'
+					  : null,
+				  MathReservationRoutes.genInfo,
+				  GenInfoRoutes.premiumProductionControl,
+			  ),
+			  this.buildMenuItem(
+				  'Reglas de Validación',
+				  null,
+				  MathReservationRoutes.genInfo,
+				  GenInfoRoutes.validationReportGen,
+			  ),
+			  this.buildMenuItem(
+				  'Control de cambio de datos',
+				  null,
+				  MathReservationRoutes.genInfo,
+				  GenInfoRoutes.dataChangeControl,
+			  ),
+			  this.buildMenuItem('Control de pagos', null, MathReservationRoutes.genInfo, GenInfoRoutes.paymentControl),
+			  this.buildMenuItem(
+				  'Métricas adicionales',
+				  null,
+				  MathReservationRoutes.genInfo,
+				  GenInfoRoutes.additionalMetrics,
+			  ),
+			  this.buildMenuItem(
+				  'Generación de Reportes de Validación',
+				  null,
+				  MathReservationRoutes.genInfo,
+				  GenInfoRoutes.validationReportGen,
+			  ),
+		  ],
+	  },
+	  {
+		  label: '2. Generación de Interfaces de Reservas',
+		  routerLink: [this.basePath, MathReservationRoutes.genReservationInterfaces],
+		  expanded: this.currentPath().includes(MathReservationRoutes.genReservationInterfaces),
+	  },
+	  {
+		  label: '3. Proceso de Retroalimentación',
+	  },
+	  {
+		  label: '4. Resultados de Cierre',
+	  },
+	  {
+		  label: '5. Registro y Conciliación Contable',
+	  },
+	  {
+		  label: '6. Reportes post cierre',
+	  },
   ]);
-
-  validateCheckStage(currentStatus: ProcessStatusModel | undefined, block: BlockProcess, stage: StageProcess): boolean {
-    if (!currentStatus) {
-      return false;
-    }
-
-    const status = Number(`${currentStatus.block}${currentStatus.stage}`);
-    const ref = Number(`${block}${stage}`);
-
-    console.log(status);
-    console.log(ref);
-
-    return status > ref;
-  }
 
   validateRoute(originPath: string, path: string): string {
     const fullPath = `${this.basePath}/${originPath}/${path}`;
