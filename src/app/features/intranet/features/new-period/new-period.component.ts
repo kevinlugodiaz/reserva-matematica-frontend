@@ -15,7 +15,7 @@ import { DatePipe } from '@angular/common';
 })
 export default class NewPeriodComponent implements OnInit {
   readonly processStore = inject(ProcessStore);
-  private readonly period = signal(localStorage.getItem('period') || '202405');
+  private readonly period = signal(localStorage.getItem('period') || '202207');
 
   ngOnInit(): void {
     this.processStore.getStatus({

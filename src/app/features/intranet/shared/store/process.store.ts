@@ -49,6 +49,7 @@ export const ProcessStore = signalStore(
                 patchState(store, {
                   isLoading: true,
                   data: {
+										period: payload.period,
                     status: ProcessStatusModel.build(res.data),
                   },
                 });
@@ -75,7 +76,6 @@ export const ProcessStore = signalStore(
                 response.data?.idEstado === ProcessStatus.Disrupted ||
                 response.data?.idEstado === ProcessStatus.Failed ||
                 response.data?.idEstado === ProcessStatus.Pending;
-              console.log('aqui1');
               return isCompleted
                 ? EMPTY
                 : timer(10000).pipe(switchMap(() => processService.getStatus(productId, period)));
@@ -86,10 +86,11 @@ export const ProcessStore = signalStore(
                 response.data?.idEstado === ProcessStatus.Disrupted ||
                 response.data?.idEstado === ProcessStatus.Failed ||
                 response.data?.idEstado === ProcessStatus.Pending;
+
               patchState(store, {
                 isLoading: !isCompleted,
                 data: {
-                  status: ProcessStatusModel.build(response.data),
+	                status: ProcessStatusModel.build(response.data),
                 },
               });
               storageService.set('process', getState(store));
