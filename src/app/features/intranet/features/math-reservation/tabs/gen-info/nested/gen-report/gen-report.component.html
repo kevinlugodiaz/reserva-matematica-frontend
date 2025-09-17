@@ -1,3 +1,6 @@
+@let status = processStore.getStatus(BlockProcess.GenInfo, StageProcess.GenReport);
+@let isStageCompleted = processStore.isStageCompleted(BlockProcess.GenInfo, StageProcess.GenReport);
+
 <div class="gen-report">
 	<span class="font-weight-semi-bold fs-xl mb-md block">Generar reporte - {{ periodLabel() }}</span>
 	<table class="mb-md">
@@ -5,14 +8,14 @@
 			<td class="font-weight-semi-bold">Estado</td>
 			<td>
 				:
-				@if (processStore.isStageCompleted(BlockProcess.GenInfo, StageProcess.GenReport)) {
+				@if (isStageCompleted) {
 					<p-tag severity="success"
 					       value="Completado"></p-tag>
 				} @else {
-					<p-tag [severity]="processStore.getProcessStatus()?.statusId === ProcessStatus.Completed ? 'success' :
-														processStore.getProcessStatus()?.statusId === ProcessStatus.Failed ? 'danger' :
-														processStore.getProcessStatus()?.statusId === ProcessStatus.Disrupted ? 'danger' : 'secondary'"
-					       [value]="processStore.getProcessStatus()?.label || 'Pendiente'"></p-tag>
+					<p-tag [severity]="status?.statusId === ProcessStatus.Completed ? 'success' :
+														status?.statusId === ProcessStatus.Failed ? 'danger' :
+														status?.statusId === ProcessStatus.Disrupted ? 'danger' : 'secondary'"
+					       [value]="status?.label || 'Pendiente'"></p-tag>
 				}
 			</td>
 		</tr>
@@ -25,24 +28,24 @@
 		<tr>
 			<td class="font-weight-semi-bold">Fecha de estado</td>
 			<td>
-				@let initDate = processStore.data()?.status?.startTime;
-				: {{ initDate ? (initDate | date: "dd/MM/yyyy hh:mm:ss a") : '-' }}
+				@let createdAt = status?.createdAt;
+				: {{ createdAt ? (createdAt | date: "dd/MM/yyyy hh:mm:ss a") : '-' }}
 			</td>
 		</tr>
 	</table>
 	<div class="flex gap-md">
 		<!-- No se puede generar de nuevo si el proceso está en otra etapa -->
-		@if (!processStore.isStageCompleted(BlockProcess.GenInfo, StageProcess.GenReport) &&
-		(!processStore.getProcessStatus() ||
-			processStore.getProcessStatus()?.statusId === ProcessStatus.Failed ||
-			processStore.getProcessStatus()?.statusId === ProcessStatus.Disrupted ||
-			processStore.getProcessStatus()?.statusId === ProcessStatus.Pending)) {
+		@if (!isStageCompleted &&
+		(!status ||
+			status?.statusId === ProcessStatus.Failed ||
+			status?.statusId === ProcessStatus.Disrupted ||
+			status?.statusId === ProcessStatus.Pending)) {
 			<!-- No se puede generar de nuevo si el proceso está completado -->
 			<p-button severity="primary"
 			          [label]="processStore.isLoading() ? 'Cargando' : 'Generar'"
 			          icon="bi bi-arrow-clockwise"
-			          [disabled]="processStore.getProcessStatus()?.statusId === ProcessStatus.Completed ||
-														processStore.getProcessStatus()?.statusId === ProcessStatus.InProgress"
+			          [disabled]="status?.statusId === ProcessStatus.Completed ||
+														status?.statusId === ProcessStatus.InProgress"
 			          [loading]="processStore.isLoading()"
 			          (click)="syncProcess()"/>
 		}
@@ -50,21 +53,21 @@
 		<!-- Se puede exportar si el proceso se ha completado o si está en otra etapa superior -->
 		<p-button severity="primary"
 		          class="button-excel"
-		          [label]="!processStore.getProcessStatus()?.statusId ||
-		          (processStore.getProcessStatus()?.statusId === ProcessStatus.Completed) ? 'Exportar' : 'Generando reporte'"
+		          [label]="!status?.statusId ||
+		          (status?.statusId === ProcessStatus.Completed) ? 'Exportar' : 'Generando reporte'"
 		          icon="bi bi-file-excel"
 		          [loading]="processStore.isLoading()"
-		          [disabled]="processStore.getProcessStatus()?.statusId !== ProcessStatus.Completed && !processStore.isStageCompleted(BlockProcess.GenInfo, StageProcess.GenReport)"
+		          [disabled]="status?.statusId !== ProcessStatus.Completed && !isStageCompleted"
 		          (click)="downloadFile()"/>
 
 		<!-- Solo se puede continuar si el proceso está completado y no se ha aprobado aún -->
-		@if (!processStore.isStageCompleted(BlockProcess.GenInfo, StageProcess.GenReport)) {
+		@if (!isStageCompleted) {
 			<p-button severity="primary"
 			          label="Continuar"
 			          icon="bi bi-arrow-right"
 			          iconPos="right"
 			          [loading]="processStore.isLoading()"
-			          [disabled]="processStore.getProcessStatus()?.statusId !== ProcessStatus.Completed"
+			          [disabled]="status?.statusId !== ProcessStatus.Completed"
 			          (click)="approve()"/>
 		}
 	</div>

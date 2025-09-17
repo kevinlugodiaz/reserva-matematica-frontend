@@ -49,8 +49,8 @@ export const ProcessStore = signalStore(
                 patchState(store, {
                   isLoading: true,
                   data: {
-										period: payload.period,
-                    status: ProcessStatusModel.build(res.data),
+                    period: payload.period,
+                    status: [ProcessStatusModel.build(res.data)],
                   },
                 });
                 storageService.set('process', getState(store));
@@ -64,33 +64,38 @@ export const ProcessStore = signalStore(
         ),
       ),
     ),
-    getStatus: rxMethod(
+    syncStatus: rxMethod(
       pipe(
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         tap((_: ProcessPayload) => patchState(store, { isLoading: true })),
-        switchMap(({ productId, period }: ProcessPayload) =>
+        switchMap(({ productId, period, block, stage }: ProcessPayload) =>
           processService.getStatus(productId, period).pipe(
             expand((response) => {
+              const last = response.data.filter((x) => x.bloque === block && x.etapa === stage).at(-1);
+
               const isCompleted =
-                response.data?.idEstado === ProcessStatus.Completed ||
-                response.data?.idEstado === ProcessStatus.Disrupted ||
-                response.data?.idEstado === ProcessStatus.Failed ||
-                response.data?.idEstado === ProcessStatus.Pending;
+                last?.idEstado === ProcessStatus.Completed ||
+                last?.idEstado === ProcessStatus.Disrupted ||
+                last?.idEstado === ProcessStatus.Failed ||
+                last?.idEstado === ProcessStatus.Pending;
               return isCompleted
                 ? EMPTY
                 : timer(10000).pipe(switchMap(() => processService.getStatus(productId, period)));
             }),
             tap((response) => {
+              const model = response.data.map((obj) => ProcessStatusModel.build(obj));
+              const last = model.filter((x) => x.block === block && x.stage === stage).at(-1);
+
               const isCompleted =
-                response.data?.idEstado === ProcessStatus.Completed ||
-                response.data?.idEstado === ProcessStatus.Disrupted ||
-                response.data?.idEstado === ProcessStatus.Failed ||
-                response.data?.idEstado === ProcessStatus.Pending;
+                last?.statusId === ProcessStatus.Completed ||
+                last?.statusId === ProcessStatus.Disrupted ||
+                last?.statusId === ProcessStatus.Failed ||
+                last?.statusId === ProcessStatus.Pending;
 
               patchState(store, {
                 isLoading: !isCompleted,
                 data: {
-	                status: ProcessStatusModel.build(response.data),
+                  status: model,
                 },
               });
               storageService.set('process', getState(store));
@@ -126,10 +131,13 @@ export const ProcessStore = signalStore(
       patchState(store, { isLoading: true });
       try {
         const res = await firstValueFrom(processService.approveStage(req));
+        const state = getState(store);
+        const updatedStatus = [...state.data!.status, ProcessStatusModel.build(res.data)];
+
         patchState(store, {
           isLoading: false,
           data: {
-            status: ProcessStatusModel.build(res.data),
+            status: updatedStatus,
           },
         });
         storageService.set('process', getState(store));
@@ -140,7 +148,7 @@ export const ProcessStore = signalStore(
     },
     isStageCompleted: (block: BlockProcess, stage: StageProcess) => {
       const state = getState(store);
-      const status = state.data?.status;
+      const status = state.data?.status ? state.data?.status.at(-1) : null;
 
       if (!status) {
         return false;
@@ -149,6 +157,12 @@ export const ProcessStore = signalStore(
       const statusConcat = Number(`${status.block}${status.stage}`);
       const ref = Number(`${block}${stage}`);
       return statusConcat > ref;
+    },
+    getStatus: (block: BlockProcess, stage: StageProcess) => {
+      const state = getState(store);
+      return state.data?.status
+        ? state.data?.status.filter((s) => s.block === block && s.stage === stage).at(-1)
+        : null;
     },
   })),
   withComputed((store) => ({

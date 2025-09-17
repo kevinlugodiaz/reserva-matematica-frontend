@@ -23,7 +23,7 @@ export class ProcessService {
   }
 
   getStatus(productId: ProductCode, period: string) {
-    return this.apiService.get<ProcessStatusResponse>(`process/status/${productId}/${period}`);
+    return this.apiService.get<ProcessStatusResponse[]>(`process/status/${productId}/${period}`);
   }
 
   getFile(productId: ProductCode, period: string, block: BlockProcess, stage: StageProcess) {

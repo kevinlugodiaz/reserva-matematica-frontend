@@ -55,7 +55,7 @@ export default class GenReportComponent implements OnInit {
         first(),
       )
       .subscribe(() => {
-        this.processStore.getStatus({
+        this.processStore.syncStatus({
           period: this.period(),
           productId: ProductCode.RentaVitalicia,
           block: BlockProcess.GenInfo,
@@ -70,7 +70,7 @@ export default class GenReportComponent implements OnInit {
       productId: ProductCode.RentaVitalicia,
     });
     setTimeout(() => {
-      this.processStore.getStatus({
+      this.processStore.syncStatus({
         period: this.period(),
         productId: ProductCode.RentaVitalicia,
         block: BlockProcess.GenInfo,

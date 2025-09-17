@@ -4,6 +4,9 @@ import { Button } from 'primeng/button';
 import { DecimalPipe } from '@angular/common';
 import { PremiumProductionControlStore } from '@intranet/features/math-reservation/tabs/gen-info/shared/store/premium-production-control/premium-production-control.store';
 import { Tag } from 'primeng/tag';
+import { ProcessStore } from '@intranet/shared/store/process.store';
+import { ProductCode } from '@shared/enums/branch-code.enum';
+import { RouterService } from '@shared/services/router.service';
 
 @Component({
   selector: 'app-premium-production-control',
@@ -15,6 +18,8 @@ import { Tag } from 'primeng/tag';
   encapsulation: ViewEncapsulation.None,
 })
 export default class PremiumProductionControlComponent implements OnInit {
+  private readonly router = inject(RouterService);
+  private readonly processStore = inject(ProcessStore);
   readonly premiumProductionControlStore = inject(PremiumProductionControlStore);
 
   items = computed(() => this.premiumProductionControlStore.data()?.benefits || []);
@@ -23,7 +28,11 @@ export default class PremiumProductionControlComponent implements OnInit {
     this.premiumProductionControlStore.getPremiumProductionControl('202207');
   }
 
-  shouldRenderGroupLabel({ label }: { label: string }, index: number): boolean {
-    return this.items().findIndex((x) => x.description === label) === index;
+  reProcess() {
+    this.processStore.syncProcess({
+      productId: ProductCode.RentaVitalicia,
+      period: '202207',
+    });
+    this.router.navigateByUrl('/intranet/math-reservation/gen-info/gen-report');
   }
 }

@@ -18,7 +18,7 @@ export default class NewPeriodComponent implements OnInit {
   private readonly period = signal(localStorage.getItem('period') || '202207');
 
   ngOnInit(): void {
-    this.processStore.getStatus({
+    this.processStore.syncStatus({
       period: this.period(),
       productId: ProductCode.RentaVitalicia,
       block: BlockProcess.GenInfo,

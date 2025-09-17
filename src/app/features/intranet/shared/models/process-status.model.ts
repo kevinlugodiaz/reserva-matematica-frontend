@@ -10,7 +10,7 @@ export class ProcessStatusModel {
     public periodId: string,
     public productId: ProductCode,
     public statusId: ProcessStatus,
-		public label: string,
+    public label: string,
     public startTime: Date,
     public endTime: Date | null,
     public description: string | null,
@@ -19,36 +19,45 @@ export class ProcessStatusModel {
     public createdAt: Date,
   ) {}
 
-	static getStatusLabel(code: ProcessStatus): string {
-		switch (code) {
-			case ProcessStatus.Pending:
-				return 'Pendiente';
-			case ProcessStatus.InProgress:
-				return 'En Proceso';
-			case ProcessStatus.Completed:
-				return 'Completado';
-			case ProcessStatus.Failed:
-				return 'Fallido';
-			case ProcessStatus.Disrupted:
-				return 'Interrumpido';
-			default:
-				return 'Desconocido';
-		}
-	}
+  static getStatusLabel(code: ProcessStatus): string {
+    switch (code) {
+      case ProcessStatus.Pending:
+        return 'Pendiente';
+      case ProcessStatus.InProgress:
+        return 'En Proceso';
+      case ProcessStatus.Completed:
+        return 'Completado';
+      case ProcessStatus.Failed:
+        return 'Fallido';
+      case ProcessStatus.Disrupted:
+        return 'Interrumpido';
+      default:
+        return 'Desconocido';
+    }
+  }
 
   static build(payload: ProcessStatusResponse): ProcessStatusModel {
+    let date: Date = new Date();
+    if (payload?.dDregtimestamp) {
+      date = new Date(payload.dDregtimestamp!);
+    }
+
+    if (payload?.fechaHora) {
+      date = new Date(payload.fechaHora!);
+    }
+
     return new ProcessStatusModel(
       payload.id,
       payload.idPeriodo,
       payload.idProducto,
       payload.idEstado,
-			this.getStatusLabel(payload.idEstado),
+      this.getStatusLabel(payload.idEstado),
       new Date(payload.horaInicio),
       payload.horaFin ? new Date(payload.horaFin) : null,
       payload.descripcion,
       payload.bloque,
       payload.etapa,
-      new Date(payload.dDregtimestamp),
+      date,
     );
   }
 }

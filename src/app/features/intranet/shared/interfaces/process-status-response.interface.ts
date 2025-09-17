@@ -6,6 +6,7 @@ import { ProcessStatus } from '../enums/process-status.enum';
 export interface ProcessStatusResponse {
   id: number;
   idPeriodo: string;
+  idProcess?: string;
   idProducto: ProductCode;
   idEstado: ProcessStatus;
   horaInicio: Date;
@@ -13,5 +14,6 @@ export interface ProcessStatusResponse {
   descripcion: string | null;
   bloque: BlockProcess;
   etapa: StageProcess;
-  dDregtimestamp: Date;
+  dDregtimestamp?: Date;
+	fechaHora?: Date;
 }
