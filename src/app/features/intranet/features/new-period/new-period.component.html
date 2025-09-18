@@ -19,14 +19,12 @@
 							<td>: Reporte (Foto del mes)</td>
 						</tr>
 						<tr>
-							@let initDate = processStore.data()?.status?.startTime;
-							@let endDate = processStore.data()?.status?.endTime;
 							<td>Fecha de inicio</td>
-							<td>: {{ initDate ? (initDate | date: "dd/MM/yyyy hh:mm:ss a") : '-' }}</td>
+							<td>: {{ initDate() ? (initDate() | date: "dd/MM/yyyy hh:mm:ss a") : '-' }}</td>
 						</tr>
 						<tr>
 							<td>Fecha fin</td>
-							<td>: {{ endDate ? (endDate | date: "dd/MM/yyyy hh:mm:ss a") : '-' }}</td>
+							<td>: {{ endDate() ? (endDate() | date: "dd/MM/yyyy hh:mm:ss a") : '-' }}</td>
 						</tr>
 					</tbody>
 				</table>

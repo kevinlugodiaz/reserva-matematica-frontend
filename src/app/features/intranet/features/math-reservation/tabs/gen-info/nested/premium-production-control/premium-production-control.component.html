@@ -2,6 +2,9 @@
 	<span class="font-weight-semi-bold fs-xl mb-md block">Control de producción de primas - Julio 2025</span>
 
 	@let data = premiumProductionControlStore.data();
+	@let status = processStore.getStatus(BlockProcess.GenInfo, StageProcess.PremiumProductionControl);
+	@let isStageCompleted = processStore.isStageCompleted(BlockProcess.GenInfo, StageProcess.PremiumProductionControl);
+
 	@if (data && data.total) {
 		<table class="mb-md">
 			<tbody>
@@ -9,17 +12,24 @@
 					<td class="font-weight-semi-bold">Estado</td>
 					<td>
 						:
-						<p-tag severity="success"
-						       value="Completado"></p-tag>
+						@if (isStageCompleted) {
+							<p-tag severity="success"
+							       value="Completado"></p-tag>
+						} @else {
+							<p-tag [severity]="status?.statusId === ProcessStatus.Completed ? 'success' :
+														status?.statusId === ProcessStatus.Failed ? 'danger' :
+														status?.statusId === ProcessStatus.Disrupted ? 'danger' : 'secondary'"
+							       [value]="status?.label || 'Pendiente'"></p-tag>
+						}
 					</td>
 				</tr>
 				<tr>
 					<td class="font-weight-semi-bold">Fecha de Estado</td>
-					<td>: 08/08/2025</td>
+					<td>: {{ status?.createdAt ? (status?.createdAt | date: "dd/MM/yyyy hh:mm:ss a") : "-" }}</td>
 				</tr>
 				<tr>
 					<td class="font-weight-semi-bold">Fecha Cierre</td>
-					<td>: 31/07/2025</td>
+					<td>: {{ lastDayPeriod() }}</td>
 				</tr>
 			</tbody>
 		</table>

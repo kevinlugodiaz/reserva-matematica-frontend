@@ -167,5 +167,6 @@ export const ProcessStore = signalStore(
   })),
   withComputed((store) => ({
     getProcessStatus: computed(() => store.data()?.status),
+    getPeriod: computed(() => (store.data()?.status ? store.data()!.status[0].periodId! : '')),
   })),
 );
