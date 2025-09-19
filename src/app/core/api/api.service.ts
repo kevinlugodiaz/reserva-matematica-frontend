@@ -17,12 +17,23 @@ export class ApiService {
   }
 
   getFile(endpoint: string) {
-    return this.http.get(`${this.baseUrl}/${endpoint}`, { responseType: 'blob' }).pipe(
-      tap((blob) => {
-        const url = window.URL.createObjectURL(blob);
+    return this.http.get(`${this.baseUrl}/${endpoint}`, { responseType: 'blob', observe: 'response' }).pipe(
+      tap((res) => {
+        const contentDisposition = res.headers.get('Content-Disposition');
+	      console.log(contentDisposition);
+        let fileName = 'descarga';
+
+        if (contentDisposition) {
+          const match = contentDisposition.match(/filename="?([^"]+)"?/);
+          if (match?.[1]) {
+            fileName = match[1].split(';')[0];
+          }
+        }
+
+        const url = window.URL.createObjectURL(res.body!);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `descarga-${Date.now()}.xlsx`;
+        a.download = fileName;
         a.click();
         window.URL.revokeObjectURL(url);
       }),

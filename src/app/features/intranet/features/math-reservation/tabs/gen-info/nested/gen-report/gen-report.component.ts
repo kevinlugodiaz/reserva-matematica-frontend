@@ -1,4 +1,4 @@
-import { ApplicationRef, ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
 import { Button } from 'primeng/button';
 import { Tag } from 'primeng/tag';
 import { ProcessStore } from '@intranet/shared/store/process.store';
@@ -6,12 +6,13 @@ import { ProductCode } from '@shared/enums/branch-code.enum';
 import { ProcessStatus } from '@intranet/shared/enums/process-status.enum';
 import { BlockProcess } from '@intranet/shared/enums/block-process.enum';
 import { StageProcess } from '@intranet/shared/enums/stage-process.enum';
-import { filter, first } from 'rxjs';
+import { interval, tap, timer } from 'rxjs';
 import { DatePipe } from '@angular/common';
 import { RouterService } from '@shared/services/router.service';
 import { GenInfoRoutes } from '@intranet/features/math-reservation/tabs/gen-info/shared/enums/gen-info.routes';
 import { MathReservationRoutes } from '@intranet/features/math-reservation/shared/enums/math-reservation-routes.enum';
-import { IntranetRoutes } from '@intranet/shared/enums/intranet-routes.enum';
+import { buildMathReservationRouteUrl } from '@shared/helpers/build-route.helper';
+import { AppRefService } from '@shared/services/app-ref.service';
 
 @Component({
   selector: 'app-gen-report',
@@ -21,9 +22,13 @@ import { IntranetRoutes } from '@intranet/shared/enums/intranet-routes.enum';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class GenReportComponent implements OnInit {
-  readonly processStore = inject(ProcessStore);
-  private readonly appRef = inject(ApplicationRef);
+  private readonly appRefService = inject(AppRefService);
   private readonly router = inject(RouterService);
+  readonly processStore = inject(ProcessStore);
+
+  protected readonly ProcessStatus = ProcessStatus;
+  protected readonly BlockProcess = BlockProcess;
+  protected readonly StageProcess = StageProcess;
 
   private readonly monthLabel = {
     '01': 'Enero',
@@ -39,7 +44,7 @@ export default class GenReportComponent implements OnInit {
     '11': 'Noviembre',
     '12': 'Diciembre',
   };
-  readonly ProcessStatus = ProcessStatus;
+
   private readonly period = signal(localStorage.getItem('period') || '202405');
 
   readonly periodLabel = computed(() => {
@@ -49,19 +54,14 @@ export default class GenReportComponent implements OnInit {
   });
 
   ngOnInit() {
-    this.appRef.isStable
-      .pipe(
-        filter((stable) => stable),
-        first(),
-      )
-      .subscribe(() => {
-        this.processStore.syncStatus({
-          period: this.period(),
-          productId: ProductCode.RentaVitalicia,
-          block: BlockProcess.GenInfo,
-          stage: StageProcess.GenReport,
-        });
+    this.appRefService.isStable(() => {
+      this.processStore.syncStatus({
+        period: this.period(),
+        productId: ProductCode.RentaVitalicia,
+        block: BlockProcess.GenInfo,
+        stage: StageProcess.GenReport,
       });
+    });
   }
 
   syncProcess() {
@@ -69,6 +69,7 @@ export default class GenReportComponent implements OnInit {
       period: this.period(),
       productId: ProductCode.RentaVitalicia,
     });
+
     setTimeout(() => {
       this.processStore.syncStatus({
         period: this.period(),
@@ -76,7 +77,7 @@ export default class GenReportComponent implements OnInit {
         block: BlockProcess.GenInfo,
         stage: StageProcess.GenReport,
       });
-    }, 10000);
+    }, 5000);
   }
 
   async downloadFile() {
@@ -98,11 +99,8 @@ export default class GenReportComponent implements OnInit {
 
     if (this.processStore.isStageCompleted(BlockProcess.GenInfo, StageProcess.GenReport)) {
       this.router.navigateByUrl(
-        `/intranet/${IntranetRoutes.mathReservation}/${MathReservationRoutes.genInfo}/${GenInfoRoutes.premiumProductionControl}`,
+        buildMathReservationRouteUrl([MathReservationRoutes.genInfo, GenInfoRoutes.premiumProductionControl]),
       );
     }
   }
-
-  protected readonly BlockProcess = BlockProcess;
-  protected readonly StageProcess = StageProcess;
 }

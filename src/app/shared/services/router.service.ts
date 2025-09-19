@@ -13,6 +13,12 @@ export class RouterService {
     this.navigateWithLoader(this.router.navigate(route), loadingMessage);
   }
 
+  /**
+   * Navega a una URL específica utilizando el router de Angular.
+   * Muestra un loader opcional mientras se realiza la navegación.
+   * @param url URL a la que se debe navegar.
+   * @param loadingMessage Mensaje opcional para mostrar en el loader.
+   */
   navigateByUrl(url: string, loadingMessage?: string): void {
     this.navigateWithLoader(this.router.navigateByUrl(url), loadingMessage);
   }

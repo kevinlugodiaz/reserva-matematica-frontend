@@ -74,6 +74,7 @@ export const ProcessStore = signalStore(
               const last = response.data.filter((x) => x.bloque === block && x.etapa === stage).at(-1);
 
               const isCompleted =
+	              !!response.data?.length ||
                 last?.idEstado === ProcessStatus.Completed ||
                 last?.idEstado === ProcessStatus.Disrupted ||
                 last?.idEstado === ProcessStatus.Failed ||
@@ -87,6 +88,7 @@ export const ProcessStore = signalStore(
               const last = model.filter((x) => x.block === block && x.stage === stage).at(-1);
 
               const isCompleted =
+	              !response.data?.length ||
                 last?.statusId === ProcessStatus.Completed ||
                 last?.statusId === ProcessStatus.Disrupted ||
                 last?.statusId === ProcessStatus.Failed ||
@@ -156,7 +158,8 @@ export const ProcessStore = signalStore(
 
       const statusConcat = Number(`${status.block}${status.stage}`);
       const ref = Number(`${block}${stage}`);
-      return statusConcat > ref;
+	    console.log(statusConcat, ref);
+	    return statusConcat > ref;
     },
     getStatus: (block: BlockProcess, stage: StageProcess) => {
       const state = getState(store);

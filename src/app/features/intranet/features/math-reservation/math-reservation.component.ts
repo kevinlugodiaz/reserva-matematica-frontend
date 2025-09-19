@@ -1,23 +1,19 @@
-import {
-	ChangeDetectionStrategy,
-	Component,
-	computed,
-	inject,
-	signal,
-	ViewEncapsulation
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal, ViewEncapsulation } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { PanelMenu } from 'primeng/panelmenu';
 import { Router, RouterOutlet } from '@angular/router';
 import { Tab, TabList, Tabs, TabsModule } from 'primeng/tabs';
+import { MenuItem } from 'primeng/api';
 
-import { IntranetRoutes } from '../../shared/enums/intranet-routes.enum';
+import { ProcessStore } from '@intranet/shared/store/process.store';
 import { MathReservationRoutes } from './shared/enums/math-reservation-routes.enum';
 import { GenInfoRoutes } from './tabs/gen-info/shared/enums/gen-info.routes';
-import { AppRoutes } from '@shared/enums/app-routes.enums';
-import { ProcessStore } from '@intranet/shared/store/process.store';
 import { StageProcess } from '@intranet/shared/enums/stage-process.enum';
 import { BlockProcess } from '@intranet/shared/enums/block-process.enum';
+import { ProcessStatus } from '@intranet/shared/enums/process-status.enum';
+import { buildMathReservationRouteUrl } from '@shared/helpers/build-route.helper';
+
+type ProcessStatusIcon = 'approved' | 'success' | 'error' | 'pending' | null;
 
 @Component({
   selector: 'app-math-reservation',
@@ -32,7 +28,6 @@ export default class MathReservationComponent {
   private readonly router = inject(Router);
   private readonly processStore = inject(ProcessStore);
 
-  private readonly basePath = `/${AppRoutes.intranet}/${IntranetRoutes.mathReservation}`;
   private readonly tabPaths: Record<string, string> = {
     '0': MathReservationRoutes.genInfo,
     '1': MathReservationRoutes.genReservationInterfaces,
@@ -43,77 +38,77 @@ export default class MathReservationComponent {
   };
 
   currentPath = signal<string>(this.router.url);
-  menu = computed(() => [
-	  {
-		  label: '1. Generación de Información',
-		  icon: 'bi-dash-circle-fill',
-		  expanded: this.currentPath().includes(MathReservationRoutes.genInfo),
-		  command: () => this.navigate([this.basePath, MathReservationRoutes.genInfo, GenInfoRoutes.genReport].join('/')),
-		  items: [
-			  this.buildMenuItem(
-				  'Generar reporte (Foto del mes)',
-				  this.processStore.isStageCompleted(BlockProcess.GenInfo, StageProcess.GenReport) ? 'success' : null,
-				  MathReservationRoutes.genInfo,
-				  GenInfoRoutes.genReport,
-			  ),
-			  this.buildMenuItem(
-				  'Control de producción de primas',
-				  this.processStore.isStageCompleted(BlockProcess.GenInfo, StageProcess.PremiumProductionControl)
-					  ? 'success'
-					  : null,
-				  MathReservationRoutes.genInfo,
-				  GenInfoRoutes.premiumProductionControl,
-			  ),
-			  this.buildMenuItem(
-				  'Reglas de Validación',
-				  null,
-				  MathReservationRoutes.genInfo,
-				  GenInfoRoutes.validationReportGen,
-			  ),
-			  this.buildMenuItem(
-				  'Control de cambio de datos',
-				  null,
-				  MathReservationRoutes.genInfo,
-				  GenInfoRoutes.dataChangeControl,
-			  ),
-			  this.buildMenuItem('Control de pagos', null, MathReservationRoutes.genInfo, GenInfoRoutes.paymentControl),
-			  this.buildMenuItem(
-				  'Métricas adicionales',
-				  null,
-				  MathReservationRoutes.genInfo,
-				  GenInfoRoutes.additionalMetrics,
-			  ),
-			  this.buildMenuItem(
-				  'Generación de Reportes de Validación',
-				  null,
-				  MathReservationRoutes.genInfo,
-				  GenInfoRoutes.validationReportGen,
-			  ),
-		  ],
-	  },
-	  {
-		  label: '2. Generación de Interfaces de Reservas',
-		  routerLink: [this.basePath, MathReservationRoutes.genReservationInterfaces],
-		  expanded: this.currentPath().includes(MathReservationRoutes.genReservationInterfaces),
-	  },
-	  {
-		  label: '3. Proceso de Retroalimentación',
-	  },
-	  {
-		  label: '4. Resultados de Cierre',
-	  },
-	  {
-		  label: '5. Registro y Conciliación Contable',
-	  },
-	  {
-		  label: '6. Reportes post cierre',
-	  },
+  menu = computed((): MenuItem[] => [
+    {
+      label: '1. Generación de Información',
+      icon: 'bi-dash-circle-fill',
+      expanded: this.currentPath().includes(MathReservationRoutes.genInfo),
+      items: [
+        this.buildMenuItem(
+          'Generar reporte (Foto del mes)',
+          this.buildIcon(BlockProcess.GenInfo, StageProcess.GenReport),
+          MathReservationRoutes.genInfo,
+          GenInfoRoutes.genReport,
+        ),
+        this.buildMenuItem(
+          'Control de producción de primas',
+          this.buildIcon(BlockProcess.GenInfo, StageProcess.PremiumProductionControl),
+          MathReservationRoutes.genInfo,
+          GenInfoRoutes.premiumProductionControl,
+        ),
+        this.buildMenuItem(
+          'Reglas de Validación',
+          this.buildIcon(BlockProcess.GenInfo, StageProcess.RulesValidation),
+          MathReservationRoutes.genInfo,
+          GenInfoRoutes.rulesValidation,
+        ),
+        this.buildMenuItem(
+          'Control de cambio de datos',
+          this.buildIcon(BlockProcess.GenInfo, StageProcess.DataChangeControl),
+          MathReservationRoutes.genInfo,
+          GenInfoRoutes.dataChangeControl,
+        ),
+        this.buildMenuItem(
+          'Control de pagos',
+          this.buildIcon(BlockProcess.GenInfo, StageProcess.PaymentControl),
+          MathReservationRoutes.genInfo,
+          GenInfoRoutes.paymentControl,
+        ),
+        this.buildMenuItem(
+          'Métricas adicionales',
+          this.buildIcon(BlockProcess.GenInfo, StageProcess.AdditionalMetrics),
+          MathReservationRoutes.genInfo,
+          GenInfoRoutes.additionalMetrics,
+        ),
+        this.buildMenuItem(
+          'Generación de Reportes de Validación',
+          this.buildIcon(BlockProcess.GenInfo, StageProcess.ValidationReportGen),
+          MathReservationRoutes.genInfo,
+          GenInfoRoutes.validationReportGen,
+        ),
+      ],
+    },
+    {
+      label: '2. Generación de Interfaces de Reservas',
+      expanded: this.currentPath().includes(MathReservationRoutes.genReservationInterfaces),
+    },
+    {
+      label: '3. Proceso de Retroalimentación',
+      expanded: this.currentPath().includes(MathReservationRoutes.feedbackProcess),
+    },
+    {
+      label: '4. Resultados de Cierre',
+      expanded: this.currentPath().includes(MathReservationRoutes.closingResults),
+    },
+    {
+      label: '5. Registro y Conciliación Contable',
+      expanded: this.currentPath().includes(MathReservationRoutes.accountingReconciliation),
+    },
+    {
+      label: '6. Reportes post cierre',
+      expanded: this.currentPath().includes(MathReservationRoutes.closingReports),
+    },
   ]);
-
-  validateRoute(originPath: string, path: string): string {
-    const fullPath = `${this.basePath}/${originPath}/${path}`;
-    return this.currentPath() === fullPath ? 'router-link-active' : '';
-  }
 
   /**
    * Construye un objeto de ítem de menú para el PanelMenu.
@@ -123,29 +118,52 @@ export default class MathReservationComponent {
    * @param path Ruta específica del ítem.
    * @returns Objeto con propiedades para el ítem de menú.
    */
-  buildMenuItem(
-    label: string,
-    icon: 'success' | 'error' | 'pending' | null,
-    originPath: string,
-    path: string,
-  ): {
-    label: string;
-    icon: string;
-    routerLink: string[];
-    styleClass: string;
-    command: () => void;
-  } {
+  buildMenuItem(label: string, icon: string, originPath: string, path: string): MenuItem {
+    const pathUrl = buildMathReservationRouteUrl([originPath, path]);
     return {
       label,
-      icon: icon === 'success' ? 'bi-check-circle-fill' : icon === 'error' ? 'bi-x-circle-fill' : 'bi-dash-circle-fill',
-      routerLink: [this.basePath, originPath, path],
-      styleClass: this.validateRoute(originPath, path),
-      command: () => this.currentPath.set([this.basePath, originPath, path].join('/')),
+      icon,
+      routerLink: pathUrl,
     };
   }
 
+  private buildIcon(block: BlockProcess, stage: StageProcess): string {
+    const isApproved = this.processStore.isStageCompleted(block, stage);
+    if (isApproved) {
+      return this.getIconCode('approved');
+    }
+
+    const status = this.processStore.getStatus(block, stage);
+    if (!status) {
+      return this.getIconCode('pending');
+    }
+
+    switch (status.statusId) {
+      case ProcessStatus.Completed:
+        return this.getIconCode('success');
+      case ProcessStatus.Failed:
+      case ProcessStatus.Disrupted:
+        return this.getIconCode('error');
+      default:
+        return this.getIconCode('pending');
+    }
+  }
+
+  private getIconCode(icon: ProcessStatusIcon): string {
+    switch (icon) {
+      case 'approved':
+        return 'bi-check-circle-fill';
+      case 'success':
+        return 'bi-check-circle';
+      case 'error':
+        return 'bi-x-circle-fill';
+      default:
+        return 'bi-dash-circle-fill';
+    }
+  }
+
   tabChange(tab: string | number): void {
-    const path = `${this.basePath}/${this.tabPaths[tab.toString()]}`;
+    const path = buildMathReservationRouteUrl([this.tabPaths[tab.toString()]]);
     this.navigate(path);
   }
 

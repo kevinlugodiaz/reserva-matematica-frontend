@@ -12,6 +12,11 @@ import { RouterService } from '@shared/services/router.service';
 import { BlockProcess } from '@intranet/shared/enums/block-process.enum';
 import { StageProcess } from '@intranet/shared/enums/stage-process.enum';
 import { ProcessStatus } from '@intranet/shared/enums/process-status.enum';
+import { IntranetRoutes } from '@intranet/shared/enums/intranet-routes.enum';
+import { MathReservationRoutes } from '@intranet/features/math-reservation/shared/enums/math-reservation-routes.enum';
+import { GenInfoRoutes } from '@intranet/features/math-reservation/tabs/gen-info/shared/enums/gen-info.routes';
+import { buildMathReservationRouteUrl } from '@shared/helpers/build-route.helper';
+import { AppRefService } from '@shared/services/app-ref.service';
 
 @Component({
   selector: 'app-premium-production-control',
@@ -24,21 +29,32 @@ import { ProcessStatus } from '@intranet/shared/enums/process-status.enum';
 })
 export default class PremiumProductionControlComponent implements OnInit {
   private readonly router = inject(RouterService);
+  private readonly appRefService = inject(AppRefService);
   readonly processStore = inject(ProcessStore);
   readonly premiumProductionControlStore = inject(PremiumProductionControlStore);
+
+  protected readonly BlockProcess = BlockProcess;
+  protected readonly StageProcess = StageProcess;
+  protected readonly ProcessStatus = ProcessStatus;
 
   readonly lastDayPeriod = computed(() => this.getLastDayOfMonth(this.processStore.getPeriod()));
 
   items = computed(() => this.premiumProductionControlStore.data()?.benefits || []);
 
   ngOnInit() {
-    this.premiumProductionControlStore.getPremiumProductionControl(this.processStore.getPeriod());
+    this.appRefService.isStable(() => {
+      this.premiumProductionControlStore.getPremiumProductionControl(this.processStore.getPeriod());
+      this.processStore.syncStatus({
+        productId: ProductCode.RentaVitalicia,
+        period: this.processStore.getPeriod(),
+      });
+    });
   }
 
   getLastDayOfMonth(yyyymm: string): string {
-    const date = dayjs(yyyymm + '01'); // crea el día 1 del mes
-    const lastDay = date.endOf('month'); // obtiene el último día del mes
-    return lastDay.format('DD/MM/YYYY'); // formato editable
+    const date = dayjs(yyyymm + '01');
+    const lastDay = date.endOf('month');
+    return lastDay.format('DD/MM/YYYY');
   }
 
   reProcess() {
@@ -46,10 +62,27 @@ export default class PremiumProductionControlComponent implements OnInit {
       productId: ProductCode.RentaVitalicia,
       period: this.processStore.getPeriod(),
     });
-    this.router.navigateByUrl('/intranet/math-reservation/gen-info/gen-report');
+    this.router.navigateByUrl(buildMathReservationRouteUrl([MathReservationRoutes.genInfo, GenInfoRoutes.genReport]));
   }
 
-  protected readonly BlockProcess = BlockProcess;
-  protected readonly StageProcess = StageProcess;
-  protected readonly ProcessStatus = ProcessStatus;
+  downloadFile() {
+    this.premiumProductionControlStore.downloadFile(this.processStore.getPeriod());
+  }
+
+  async approve() {
+    await this.processStore.approveAsync({
+      period: this.processStore.getPeriod(),
+      productId: ProductCode.RentaVitalicia,
+      block: BlockProcess.GenInfo,
+      stage: StageProcess.RulesValidation,
+    });
+
+    if (!this.processStore.isStageCompleted(BlockProcess.GenInfo, StageProcess.GenReport)) {
+      return;
+    }
+
+    this.router.navigateByUrl(
+      buildMathReservationRouteUrl([MathReservationRoutes.genInfo, GenInfoRoutes.rulesValidation]),
+    );
+  }
 }

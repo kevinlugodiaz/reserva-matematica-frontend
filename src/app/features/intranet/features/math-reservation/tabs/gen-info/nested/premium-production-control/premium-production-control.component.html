@@ -1,5 +1,5 @@
 <section class="premium-production-control">
-	<span class="font-weight-semi-bold fs-xl mb-md block">Control de producción de primas - Julio 2025</span>
+	<span class="font-weight-semi-bold fs-xl mb-md block">Control de producción de primas - Julio 2022</span>
 
 	@let data = premiumProductionControlStore.data();
 	@let status = processStore.getStatus(BlockProcess.GenInfo, StageProcess.PremiumProductionControl);
@@ -100,9 +100,26 @@
 			</ng-template>
 		</p-table>
 		<div class="flex gap-md mt-md">
-			<p-button severity="primary" label="Reprocesar" icon="bi bi-arrow-clockwise" (click)="reProcess()"/>
-			<p-button class="button-excel" label="Exportar" icon="bi bi-file-excel"/>
-			<p-button severity="primary" label="Continuar" icon="bi bi-arrow-right" iconPos="right"/>
+			@if (!isStageCompleted) {
+				<p-button severity="primary" label="Reprocesar" icon="bi bi-arrow-clockwise"
+			            [disabled]="status?.statusId === ProcessStatus.InProgress"
+			            (click)="reProcess()"/>
+			}
+
+			<p-button class="button-excel"
+			          label="Exportar"
+			          icon="bi bi-file-excel"
+			          [disabled]="status?.statusId !== ProcessStatus.Completed"
+			          (click)="downloadFile()"/>
+
+			@if (!isStageCompleted) {
+				<p-button severity="primary"
+				          label="Continuar"
+				          icon="bi bi-arrow-right"
+				          iconPos="right"
+				          [disabled]="status?.statusId !== ProcessStatus.Completed"
+				          (click)="approve()"/>
+			}
 		</div>
 	}
 </section>
