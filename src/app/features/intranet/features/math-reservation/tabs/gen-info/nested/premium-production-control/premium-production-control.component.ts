@@ -12,7 +12,6 @@ import { RouterService } from '@shared/services/router.service';
 import { BlockProcess } from '@intranet/shared/enums/block-process.enum';
 import { StageProcess } from '@intranet/shared/enums/stage-process.enum';
 import { ProcessStatus } from '@intranet/shared/enums/process-status.enum';
-import { IntranetRoutes } from '@intranet/shared/enums/intranet-routes.enum';
 import { MathReservationRoutes } from '@intranet/features/math-reservation/shared/enums/math-reservation-routes.enum';
 import { GenInfoRoutes } from '@intranet/features/math-reservation/tabs/gen-info/shared/enums/gen-info.routes';
 import { buildMathReservationRouteUrl } from '@shared/helpers/build-route.helper';
@@ -41,12 +40,14 @@ export default class PremiumProductionControlComponent implements OnInit {
 
   items = computed(() => this.premiumProductionControlStore.data()?.benefits || []);
 
-  ngOnInit() {
-    this.appRefService.isStable(() => {
-      this.premiumProductionControlStore.getPremiumProductionControl(this.processStore.getPeriod());
+  async ngOnInit() {
+    this.appRefService.isStable(async () => {
+      await this.premiumProductionControlStore.getPremiumProductionControlAsync(this.processStore.getPeriod());
       this.processStore.syncStatus({
         productId: ProductCode.RentaVitalicia,
         period: this.processStore.getPeriod(),
+        block: BlockProcess.GenInfo,
+	      stage: StageProcess.PremiumProductionControl,
       });
     });
   }

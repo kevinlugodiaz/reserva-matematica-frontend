@@ -74,7 +74,7 @@ export const ProcessStore = signalStore(
               const last = response.data.filter((x) => x.bloque === block && x.etapa === stage).at(-1);
 
               const isCompleted =
-	              !!response.data?.length ||
+	              !response.data?.length ||
                 last?.idEstado === ProcessStatus.Completed ||
                 last?.idEstado === ProcessStatus.Disrupted ||
                 last?.idEstado === ProcessStatus.Failed ||

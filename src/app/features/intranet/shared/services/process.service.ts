@@ -15,7 +15,7 @@ export class ProcessService {
   private readonly apiService = inject(ApiService);
 
   syncProcess(payload: SyncProcessRequest) {
-    return this.apiService.post<ProcessStatusResponse, SyncProcessRequest>('sync', payload);
+    return this.apiService.post<ProcessStatusResponse, SyncProcessRequest>('gen-info/sync', payload);
   }
 
   approveStage(payload: ApproveStageRequest) {
@@ -27,6 +27,6 @@ export class ProcessService {
   }
 
   getFile(productId: ProductCode, period: string, block: BlockProcess, stage: StageProcess) {
-    return this.apiService.getFile(`process/file/${productId}/${period}/${block}/${stage}`);
+    return this.apiService.getFile(`gen-info/gen-report/file/${productId}/${period}/${block}/${stage}`);
   }
 }

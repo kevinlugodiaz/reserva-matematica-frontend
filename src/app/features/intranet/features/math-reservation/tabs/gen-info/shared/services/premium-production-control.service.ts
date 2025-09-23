@@ -9,11 +9,11 @@ import { ProductCode } from '@shared/enums/branch-code.enum';
 export class PremiumProductionControlService {
   private readonly apiService = inject(ApiService);
 
-  getPremiumProductionControl(period: string) {
-    return this.apiService.get<PremiumProductionControl>(`sync/production-control-premium/${period}`);
+  getPremiumProductionControl(product: ProductCode, period: string) {
+    return this.apiService.get<PremiumProductionControl>(`gen-info/production-control-premium/${product}/${period}`);
   }
 
   downloadFile(product: ProductCode, period: string) {
-    return this.apiService.getFile(`sync/production-control-premium/file/${product}/${period}`);
+    return this.apiService.getFile(`gen-info/production-control-premium/file/${product}/${period}`);
   }
 }
