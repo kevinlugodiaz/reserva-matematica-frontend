@@ -158,7 +158,6 @@ export const ProcessStore = signalStore(
 
       const statusConcat = Number(`${status.block}${status.stage}`);
       const ref = Number(`${block}${stage}`);
-	    console.log(statusConcat, ref);
 	    return statusConcat > ref;
     },
     getStatus: (block: BlockProcess, stage: StageProcess) => {

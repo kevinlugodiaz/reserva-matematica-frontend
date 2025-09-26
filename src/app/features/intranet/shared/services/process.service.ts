@@ -27,6 +27,6 @@ export class ProcessService {
   }
 
   getFile(productId: ProductCode, period: string, block: BlockProcess, stage: StageProcess) {
-    return this.apiService.getFile(`gen-info/gen-report/file/${productId}/${period}/${block}/${stage}`);
+    return this.apiService.getFile(`gen-info/gen-report/file/${productId}/${block}/${stage}/${period}`);
   }
 }

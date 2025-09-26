@@ -24,12 +24,16 @@
 					</td>
 				</tr>
 				<tr>
-					<td class="font-weight-semi-bold">Fecha de Estado</td>
+					<td class="font-weight-semi-bold">Fecha de Generación</td>
 					<td>: {{ status?.createdAt ? (status?.createdAt | date: "dd/MM/yyyy hh:mm:ss a") : "-" }}</td>
 				</tr>
 				<tr>
 					<td class="font-weight-semi-bold">Fecha Cierre</td>
 					<td>: {{ lastDayPeriod() }}</td>
+				</tr>
+				<tr>
+					<td class="font-weight-semi-bold">Moneda</td>
+					<td>: Soles</td>
 				</tr>
 			</tbody>
 		</table>
