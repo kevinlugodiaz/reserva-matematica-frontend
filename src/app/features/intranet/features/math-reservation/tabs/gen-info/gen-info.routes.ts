@@ -14,6 +14,10 @@ export const routes: Routes = [
         path: GenInfoRoutes.premiumProductionControl,
         loadComponent: () => import('./nested/premium-production-control/premium-production-control.component'),
       },
+	    {
+		    path: GenInfoRoutes.rulesValidation,
+		    loadComponent: () => import('./nested/rules-validation/rules-validation.component'),
+	    },
       {
         path: GenInfoRoutes.dataChangeControl,
         loadComponent: () => import('./nested/data-change-control/data-change-control.component'),

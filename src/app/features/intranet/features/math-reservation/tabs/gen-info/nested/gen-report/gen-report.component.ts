@@ -1,21 +1,34 @@
-import { ApplicationRef, ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, OnInit, signal } from '@angular/core';
 import { Button } from 'primeng/button';
 import { Tag } from 'primeng/tag';
-import { GenReportService } from './shared/services/gen-report.service';
-import { filter, first, interval, switchMap, take, tap, timer } from 'rxjs';
+import { ProcessStore } from '@intranet/shared/store/process.store';
+import { ProductCode } from '@shared/enums/branch-code.enum';
+import { ProcessStatus } from '@intranet/shared/enums/process-status.enum';
+import { BlockProcess } from '@intranet/shared/enums/block-process.enum';
+import { StageProcess } from '@intranet/shared/enums/stage-process.enum';
+import { interval, tap, timer } from 'rxjs';
+import { DatePipe } from '@angular/common';
+import { RouterService } from '@shared/services/router.service';
+import { GenInfoRoutes } from '@intranet/features/math-reservation/tabs/gen-info/shared/enums/gen-info.routes';
+import { MathReservationRoutes } from '@intranet/features/math-reservation/shared/enums/math-reservation-routes.enum';
+import { buildMathReservationRouteUrl } from '@shared/helpers/build-route.helper';
+import { AppRefService } from '@shared/services/app-ref.service';
 
 @Component({
   selector: 'app-gen-report',
-  imports: [Button, Tag],
+  imports: [Button, Tag, DatePipe],
   templateUrl: './gen-report.component.html',
   styleUrl: './gen-report.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class GenReportComponent implements OnInit {
-  private readonly genReportService = inject(GenReportService);
-  readonly existFile = signal(false);
-  private readonly appRef = inject(ApplicationRef);
-  private readonly period = signal(localStorage.getItem('period') || '202405');
+  private readonly appRefService = inject(AppRefService);
+  private readonly router = inject(RouterService);
+  readonly processStore = inject(ProcessStore);
+
+  protected readonly ProcessStatus = ProcessStatus;
+  protected readonly BlockProcess = BlockProcess;
+  protected readonly StageProcess = StageProcess;
 
   private readonly monthLabel = {
     '01': 'Enero',
@@ -32,6 +45,8 @@ export default class GenReportComponent implements OnInit {
     '12': 'Diciembre',
   };
 
+  private readonly period = signal(localStorage.getItem('period') || '202405');
+
   readonly periodLabel = computed(() => {
     const year = this.period().substring(0, 4);
     const month = this.period().substring(4, 6);
@@ -39,43 +54,53 @@ export default class GenReportComponent implements OnInit {
   });
 
   ngOnInit() {
-    timer(800)
-      .pipe(
-        switchMap(() => this.appRef.isStable),
-        filter((stable) => stable),
-        first(),
-      )
-      .subscribe(() => {
-        this.exportData(this.period());
+    this.appRefService.isStable(() => {
+      this.processStore.syncStatus({
+        period: this.period(),
+        productId: ProductCode.RentaVitalicia,
+        block: BlockProcess.GenInfo,
+        stage: StageProcess.GenReport,
       });
+    });
   }
 
-  exportData(period: string) {
-    // this.excelService.exportData(this.dummy, 'dummy-data');
+  syncProcess() {
+    this.processStore.syncProcess({
+      period: this.period(),
+      productId: ProductCode.RentaVitalicia,
+    });
 
-    interval(5000)
-      .pipe(
-        switchMap(() => this.genReportService.existFile(period)),
-        tap((res) => this.existFile.set(res)),
-        filter((res) => res),
-        take(1),
-      )
-      .subscribe();
+    setTimeout(() => {
+      this.processStore.syncStatus({
+        period: this.period(),
+        productId: ProductCode.RentaVitalicia,
+        block: BlockProcess.GenInfo,
+        stage: StageProcess.GenReport,
+      });
+    }, 5000);
   }
 
   async downloadFile() {
-    const file = await this.genReportService.getReport(this.period());
-    this.descargarBlob(file, `reporte-${this.period()}.xlsx`);
+    this.processStore.getFile({
+      productId: ProductCode.RentaVitalicia,
+      period: this.period(),
+      block: BlockProcess.GenInfo,
+      stage: StageProcess.GenReport,
+    });
   }
 
-  descargarBlob(blob: Blob, nombreArchivo: string): void {
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = nombreArchivo;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    window.URL.revokeObjectURL(url);
+  async approve() {
+    await this.processStore.approveAsync({
+      period: this.period(),
+      productId: ProductCode.RentaVitalicia,
+      block: BlockProcess.GenInfo,
+      stage: StageProcess.PremiumProductionControl,
+    });
+
+    if (this.processStore.isStageCompleted(BlockProcess.GenInfo, StageProcess.GenReport)) {
+      this.router.navigateByUrl(
+        buildMathReservationRouteUrl([MathReservationRoutes.genInfo, GenInfoRoutes.premiumProductionControl]),
+      );
+    }
   }
 }

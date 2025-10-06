@@ -20,11 +20,11 @@
 						</tr>
 						<tr>
 							<td>Fecha de inicio</td>
-							<td>: 06/08/2025 5:15</td>
+							<td>: {{ initDate() ? (initDate() | date: "dd/MM/yyyy hh:mm:ss a") : '-' }}</td>
 						</tr>
 						<tr>
 							<td>Fecha fin</td>
-							<td>: -</td>
+							<td>: {{ endDate() ? (endDate() | date: "dd/MM/yyyy hh:mm:ss a") : '-' }}</td>
 						</tr>
 					</tbody>
 				</table>

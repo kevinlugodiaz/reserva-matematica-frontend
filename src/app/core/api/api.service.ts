@@ -1,30 +1,58 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
+import { ApiResponse } from '@core/interfaces/api-response.interface';
+import { environment } from '@env';
+import { tap } from 'rxjs';
+
 @Injectable({
   providedIn: 'root',
 })
 export class ApiService {
   private readonly http = inject(HttpClient);
-  private readonly baseUrl = '';
+  private readonly baseUrl = environment.apiBaseUrl;
 
-  get(endpoint: string) {
-    return this.http.get(`${this.baseUrl}/${endpoint}`);
+  get<T>(endpoint: string) {
+    return this.http.get<ApiResponse<T>>(`${this.baseUrl}/${endpoint}`);
   }
 
-  post<T>(endpoint: string, data: T) {
-    return this.http.post(`${this.baseUrl}/${endpoint}`, data);
+  getFile(endpoint: string) {
+    return this.http.get(`${this.baseUrl}/${endpoint}`, { responseType: 'blob', observe: 'response' }).pipe(
+      tap((res) => {
+        const contentDisposition = res.headers.get('Content-Disposition');
+	      console.log(contentDisposition);
+        let fileName = 'descarga';
+
+        if (contentDisposition) {
+          const match = contentDisposition.match(/filename="?([^"]+)"?/);
+          if (match?.[1]) {
+            fileName = match[1].split(';')[0];
+          }
+        }
+
+        const url = window.URL.createObjectURL(res.body!);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        a.click();
+        window.URL.revokeObjectURL(url);
+      }),
+    );
   }
 
-  put<T>(endpoint: string, data: T) {
-    return this.http.put(`${this.baseUrl}/${endpoint}`, data);
+  post<T, R>(endpoint: string, data: R) {
+    return this.http.post<ApiResponse<T>>(`${this.baseUrl}/${endpoint}`, data);
   }
 
-  patch<T>(endpoint: string, data: T) {
-    return this.http.patch(`${this.baseUrl}/${endpoint}`, data);
+  put<T, R>(endpoint: string, data: R) {
+    return this.http.put<ApiResponse<T>>(`${this.baseUrl}/${endpoint}`, data);
   }
 
-  delete(endpoint: string) {
-    return this.http.delete(`${this.baseUrl}/${endpoint}`);
+  patch<T, R>(endpoint: string, data: R) {
+    return this.http.patch<ApiResponse<T>>(`${this.baseUrl}/${endpoint}`, data);
+  }
+
+  delete<T>(endpoint: string) {
+    return this.http.delete<ApiResponse<T>>(`${this.baseUrl}/${endpoint}`);
   }
 }

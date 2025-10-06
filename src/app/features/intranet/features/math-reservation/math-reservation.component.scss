@@ -15,16 +15,27 @@
 	}
 }
 
+.bi-check-circle,
 .bi-check-circle-fill {
 	color: #0d7239 !important;
+}
+
+.bi-x-circle-fill {
+	color: #E53935 !important;
 }
 
 .bi-dash-circle-fill {
 	color: var(--gray-300) !important;
 }
 
-.router-link-active {
-	.p-panelmenu-item-content {
+.p-panelmenu-item-content {
+	overflow: hidden;
+
+	.p-panelmenu-item-link-active {
 		background-color: var(--orange-color-100) !important;
+
+		span {
+			font-weight: 600;
+		}
 	}
 }

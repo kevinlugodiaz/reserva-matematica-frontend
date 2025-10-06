@@ -1,3 +1,6 @@
+@let status = processStore.getStatus(BlockProcess.GenInfo, StageProcess.GenReport);
+@let isStageCompleted = processStore.isStageCompleted(BlockProcess.GenInfo, StageProcess.GenReport);
+
 <div class="gen-report">
 	<span class="font-weight-semi-bold fs-xl mb-md block">Generar reporte - {{ periodLabel() }}</span>
 	<table class="mb-md">
@@ -5,8 +8,15 @@
 			<td class="font-weight-semi-bold">Estado</td>
 			<td>
 				:
-				<p-tag [severity]="existFile() ? 'success' : 'secondary'"
-				       [value]="existFile() ? 'Finalizado' : 'Procesando'"></p-tag>
+				@if (isStageCompleted) {
+					<p-tag severity="success"
+					       value="Completado"></p-tag>
+				} @else {
+					<p-tag [severity]="status?.statusId === ProcessStatus.Completed ? 'success' :
+														status?.statusId === ProcessStatus.Failed ? 'danger' :
+														status?.statusId === ProcessStatus.Disrupted ? 'danger' : 'secondary'"
+					       [value]="status?.label || 'Pendiente'"></p-tag>
+				}
 			</td>
 		</tr>
 		<tr>
@@ -16,25 +26,49 @@
 			</td>
 		</tr>
 		<tr>
-			<td class="font-weight-semi-bold">Fecha de estado</td>
+			<td class="font-weight-semi-bold">Fecha de Generación</td>
 			<td>
-				: 05/08/2024 - 14:00
+				@let createdAt = status?.createdAt;
+				: {{ createdAt ? (createdAt | date: "dd/MM/yyyy hh:mm:ss a") : '-' }}
 			</td>
 		</tr>
 	</table>
 	<div class="flex gap-md">
-		<p-button severity="primary" label="Reprocesar" icon="bi bi-arrow-clockwise" disabled/>
+		<!-- No se puede generar de nuevo si el proceso está en otra etapa -->
+		@if (!isStageCompleted &&
+		(!status ||
+			status?.statusId === ProcessStatus.Failed ||
+			status?.statusId === ProcessStatus.Disrupted ||
+			status?.statusId === ProcessStatus.Pending)) {
+			<!-- No se puede generar de nuevo si el proceso está completado -->
+			<p-button severity="primary"
+			          [label]="processStore.isLoading() ? 'Cargando' : 'Generar'"
+			          icon="bi bi-arrow-clockwise"
+			          [disabled]="status?.statusId === ProcessStatus.Completed ||
+														status?.statusId === ProcessStatus.InProgress"
+			          [loading]="processStore.isLoading()"
+			          (click)="syncProcess()"/>
+		}
+
+		<!-- Se puede exportar si el proceso se ha completado o si está en otra etapa superior -->
 		<p-button severity="primary"
 		          class="button-excel"
-		          [label]="!existFile() ? 'Generando reporte' : 'Exportar'"
+		          [label]="!status?.statusId ||
+		          (status?.statusId === ProcessStatus.Completed) ? 'Exportar' : 'Generando reporte'"
 		          icon="bi bi-file-excel"
-		          [loading]="!existFile()"
-		          [disabled]="!existFile()"
+		          [loading]="processStore.isLoading()"
+		          [disabled]="status?.statusId !== ProcessStatus.Completed && !isStageCompleted"
 		          (click)="downloadFile()"/>
-		<p-button severity="primary"
-		          label="Continuar"
-		          icon="bi bi-arrow-right"
-		          iconPos="right"
-		          disabled/>
+
+		<!-- Solo se puede continuar si el proceso está completado y no se ha aprobado aún -->
+		@if (!isStageCompleted) {
+			<p-button severity="primary"
+			          label="Continuar"
+			          icon="bi bi-arrow-right"
+			          iconPos="right"
+			          [loading]="processStore.isLoading()"
+			          [disabled]="status?.statusId !== ProcessStatus.Completed"
+			          (click)="approve()"/>
+		}
 	</div>
 </div>
