@@ -6,7 +6,6 @@ import { ProductCode } from '@shared/enums/branch-code.enum';
 import { ProcessStatus } from '@intranet/shared/enums/process-status.enum';
 import { BlockProcess } from '@intranet/shared/enums/block-process.enum';
 import { StageProcess } from '@intranet/shared/enums/stage-process.enum';
-import { interval, tap, timer } from 'rxjs';
 import { DatePipe } from '@angular/common';
 import { RouterService } from '@shared/services/router.service';
 import { GenInfoRoutes } from '@intranet/features/math-reservation/tabs/gen-info/shared/enums/gen-info.routes';
