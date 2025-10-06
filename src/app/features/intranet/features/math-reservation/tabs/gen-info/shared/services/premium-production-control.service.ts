@@ -10,10 +10,10 @@ export class PremiumProductionControlService {
   private readonly apiService = inject(ApiService);
 
   getPremiumProductionControl(product: ProductCode, period: string) {
-    return this.apiService.get<PremiumProductionControl>(`gen-info/production-control-premium/${product}/${period}`);
+    return this.apiService.get<PremiumProductionControl>(`information-generation/production-control-premium/${product}/${period}`);
   }
 
   downloadFile(product: ProductCode, period: string) {
-    return this.apiService.getFile(`gen-info/production-control-premium/file/${product}/${period}`);
+    return this.apiService.getFile(`information-generation/production-control-premium/file/${product}/${period}`);
   }
 }
