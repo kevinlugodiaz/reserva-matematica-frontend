@@ -7,6 +7,7 @@ import { ProcessStatusResponse } from '../interfaces/process-status-response.int
 export class ProcessStatusModel {
   constructor(
     public id: number | undefined,
+    public processId: number,
     public periodId: string,
     public productId: ProductCode,
     public statusId: ProcessStatus,
@@ -46,6 +47,7 @@ export class ProcessStatusModel {
 
     return new ProcessStatusModel(
       payload.id,
+			payload.idProceso,
       payload.idPeriodo,
       payload.idProducto,
       payload.idEstado,

@@ -1,10 +1,10 @@
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 import { State } from '@shared/interfaces/state.interface';
-import { PremiumProductionControl } from '@intranet/features/math-reservation/tabs/gen-info/shared/interfaces/premium-production-control.interface';
+import { PremiumProductionControl } from '../interfaces/premium-production-control.interface';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { firstValueFrom, pipe, switchMap, tap } from 'rxjs';
 import { inject } from '@angular/core';
-import { PremiumProductionControlService } from '@intranet/features/math-reservation/tabs/gen-info/shared/services/premium-production-control.service';
+import { PremiumProductionControlService } from '../services/premium-production-control.service';
 import { ProductCode } from '@shared/enums/branch-code.enum';
 
 const initialState: State<PremiumProductionControl | null> = {

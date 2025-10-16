@@ -6,7 +6,7 @@ import { ProcessStatus } from '../enums/process-status.enum';
 export interface ProcessStatusResponse {
   id: number;
   idPeriodo: string;
-  idProcess?: string;
+  idProceso: number;
   idProducto: ProductCode;
   idEstado: ProcessStatus;
   horaInicio: Date;

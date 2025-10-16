@@ -4,7 +4,7 @@ import { Button } from 'primeng/button';
 import { DatePipe, DecimalPipe } from '@angular/common';
 import dayjs from 'dayjs';
 
-import { PremiumProductionControlStore } from '@intranet/features/math-reservation/tabs/gen-info/shared/store/premium-production-control/premium-production-control.store';
+import { PremiumProductionControlStore } from './store/premium-production-control.store';
 import { Tag } from 'primeng/tag';
 import { ProcessStore } from '@intranet/shared/store/process.store';
 import { ProductCode } from '@shared/enums/branch-code.enum';
