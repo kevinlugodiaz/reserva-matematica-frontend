@@ -16,7 +16,7 @@
 					<tbody>
 						<tr>
 							<td>Etapa actual</td>
-							<td>: Reporte (Foto del mes)</td>
+							<td>: {{ currentStatus()?.stageLabel }}</td>
 						</tr>
 						<tr>
 							<td>Fecha de inicio</td>
@@ -35,9 +35,6 @@
 				<span class="new-period__group__item__title fs-xl font-weight-semi-bold text-center block">
 					Renta total
 				</span>
-				<!--<span class="new-period__group__item__percentage block text-center my-xs mx-auto font-weight-semi-bold">
-					0 %
-				</span>-->
 				<table class="new-period__group__item__table">
 					<tbody>
 						<tr>

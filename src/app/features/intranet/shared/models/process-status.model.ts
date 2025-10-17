@@ -3,6 +3,7 @@ import { ProcessStatus } from '../enums/process-status.enum';
 import { BlockProcess } from '../enums/block-process.enum';
 import { StageProcess } from '../enums/stage-process.enum';
 import { ProcessStatusResponse } from '../interfaces/process-status-response.interface';
+import { StageModel } from '@intranet/shared/models/stage.model';
 
 export class ProcessStatusModel {
   constructor(
@@ -15,6 +16,7 @@ export class ProcessStatusModel {
     public description: string | null,
     public block: BlockProcess,
     public stage: StageProcess,
+    public stageLabel: string,
     public createdAt: Date,
   ) {}
 
@@ -47,7 +49,7 @@ export class ProcessStatusModel {
 
     return new ProcessStatusModel(
       payload.id,
-			payload.idProceso,
+      payload.idProceso,
       payload.idPeriodo,
       payload.idProducto,
       payload.idEstado,
@@ -55,6 +57,7 @@ export class ProcessStatusModel {
       payload.descripcion,
       payload.bloque,
       payload.etapa,
+      StageModel.getStageLabel(`${payload.bloque}${payload.etapa}`),
       date,
     );
   }

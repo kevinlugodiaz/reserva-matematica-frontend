@@ -17,14 +17,15 @@ import { ProcessStatus } from '@intranet/shared/enums/process-status.enum';
 export default class NewPeriodComponent implements OnInit {
   readonly processStore = inject(ProcessStore);
   private readonly period = signal(localStorage.getItem('period') || '202207');
-  readonly reportStatus = computed(() => {
+  readonly currentStatus = computed(() => (this.processStore.data()?.status ?? [])?.at(-1));
+  readonly stageStatus = computed(() => {
     const report = this.processStore.data()?.status ?? [];
-    return report.filter((x) => x.block === BlockProcess.GenInfo && x.stage === StageProcess.GenReport);
+    return report?.filter((x) => x.block === this.currentStatus()?.block && x.stage === this.currentStatus()?.stage);
   });
   readonly initDate = computed(
-    () => this.reportStatus().find((x) => x.statusId === ProcessStatus.InProgress)?.createdAt,
+    () => this.stageStatus()?.find((x) => x.statusId === ProcessStatus.InProgress)?.createdAt,
   );
-  readonly endDate = computed(() => this.reportStatus().find((x) => x.statusId === ProcessStatus.Completed)?.createdAt);
+  readonly endDate = computed(() => this.stageStatus()?.find((x) => x.statusId === ProcessStatus.Completed)?.createdAt);
 
   ngOnInit(): void {
     this.processStore.syncStatus({

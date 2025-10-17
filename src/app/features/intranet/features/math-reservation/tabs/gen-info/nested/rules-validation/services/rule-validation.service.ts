@@ -17,6 +17,10 @@ export class RuleValidationService {
     return this.http.get<SummaryRule[]>(`information-generation/validation-rules/summary/${processId}`);
   }
 
+	downloadSummaryReport(processId: number) {
+		return this.http.getFile(`information-generation/validation-rules/summary/report/${processId}`);
+	}
+
   downloadReport(processId: number) {
     return this.http.getFile(`information-generation/validation-rules/result/${processId}`);
   }

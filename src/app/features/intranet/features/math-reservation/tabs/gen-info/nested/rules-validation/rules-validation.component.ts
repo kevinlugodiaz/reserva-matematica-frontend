@@ -63,6 +63,10 @@ export default class RulesValidationComponent implements OnInit {
     this.ruleValidationStore.downloadReport(this.processStore.getId());
   }
 
+	downloadSummaryReport() {
+		this.ruleValidationStore.downloadSummaryReport(this.processStore.getId());
+	}
+
   async approve() {
     await this.processStore.approveAsync({
       productId: ProductCode.RentaVitalicia,
@@ -78,5 +82,14 @@ export default class RulesValidationComponent implements OnInit {
     this.router.navigateByUrl(
       buildMathReservationRouteUrl([MathReservationRoutes.genInfo, GenInfoRoutes.dataChangeControl]),
     );
+  }
+
+  downloadReportMonthPhoto() {
+    this.processStore.getFile({
+      productId: ProductCode.RentaVitalicia,
+      period: this.processStore.getPeriod(),
+      block: BlockProcess.GenInfo,
+      stage: StageProcess.GenReport,
+    });
   }
 }

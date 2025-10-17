@@ -5,7 +5,7 @@
 
 	<p-table [value]="data"
 	         stripedRows
-	         [paginator]="!ruleValidationStore.isLoading() && data.length > 10"
+	         [paginator]="data.length > 10"
 	         [rows]="10">
 		<ng-template pTemplate="header">
 			<tr>
@@ -60,11 +60,25 @@
 		}-->
 
 		<p-button class="button-excel"
-		          label="Exportar"
+		          label="Resumen"
+		          icon="bi bi-file-excel"
+		          [loading]="ruleValidationStore.isLoading()"
+		          [disabled]="status?.statusId !== ProcessStatus.Completed || ruleValidationStore.isLoading()"
+		          (click)="downloadSummaryReport()"/>
+
+		<p-button class="button-excel"
+		          label="Detalle"
 		          icon="bi bi-file-excel"
 		          [loading]="ruleValidationStore.isLoading()"
 		          [disabled]="status?.statusId !== ProcessStatus.Completed || ruleValidationStore.isLoading()"
 		          (click)="downloadReport()"/>
+
+		<p-button class="button-excel"
+		          label="Foto del mes"
+		          icon="bi bi-file-excel"
+		          [loading]="processStore.isLoading()"
+		          [disabled]="ruleValidationStore.isLoading()"
+		          (click)="downloadReportMonthPhoto()"/>
 
 		<!--@if (!isStageCompleted()) {
 			<p-button severity="primary"

@@ -35,6 +35,16 @@ export const RuleValidationStore = signalStore(
         patchState(store, { isLoading: false });
       }
     },
+	  async downloadSummaryReport(processId: number) {
+		  try {
+			  patchState(store, { isLoading: true });
+			  await firstValueFrom(service.downloadSummaryReport(processId));
+			  patchState(store, { isLoading: false });
+		  } catch (e) {
+			  console.error(e);
+			  patchState(store, { isLoading: false });
+		  }
+	  },
     async downloadReport(processId: number) {
       try {
         patchState(store, { isLoading: true });
