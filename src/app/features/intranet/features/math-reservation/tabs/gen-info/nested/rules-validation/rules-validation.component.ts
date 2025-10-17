@@ -7,7 +7,7 @@ import { ProductCode } from '@shared/enums/branch-code.enum';
 import { BlockProcess } from '@intranet/shared/enums/block-process.enum';
 import { StageProcess } from '@intranet/shared/enums/stage-process.enum';
 import { TableModule } from 'primeng/table';
-import { DecimalPipe } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
 import { Tag } from 'primeng/tag';
 import { Button } from 'primeng/button';
 import { ProcessStatus } from '@intranet/shared/enums/process-status.enum';
@@ -15,10 +15,11 @@ import { buildMathReservationRouteUrl } from '@shared/helpers/build-route.helper
 import { MathReservationRoutes } from '@intranet/features/math-reservation/shared/enums/math-reservation-routes.enum';
 import { GenInfoRoutes } from '@intranet/features/math-reservation/tabs/gen-info/shared/enums/gen-info.routes';
 import { RouterService } from '@shared/services/router.service';
+import dayjs from 'dayjs';
 
 @Component({
   selector: 'app-rules-validation',
-  imports: [TableModule, Tag, Button, DecimalPipe],
+  imports: [TableModule, Tag, Button, DecimalPipe, DatePipe],
   templateUrl: './rules-validation.component.html',
   providers: [RuleValidationStore],
   styleUrl: './rules-validation.component.scss',
@@ -34,6 +35,7 @@ export default class RulesValidationComponent implements OnInit {
   isStageCompleted = computed(() =>
     this.processStore.isStageCompleted(BlockProcess.GenInfo, StageProcess.RulesValidation),
   );
+	readonly lastDayPeriod = computed(() => this.getLastDayOfMonth(this.processStore.getPeriod()));
 
   protected readonly BlockProcess = BlockProcess;
   protected readonly StageProcess = StageProcess;
@@ -52,20 +54,27 @@ export default class RulesValidationComponent implements OnInit {
     });
   }
 
+	getLastDayOfMonth(yyyymm: string): string {
+		const date = dayjs(yyyymm + '01');
+		const lastDay = date.endOf('month');
+		return lastDay.format('DD/MM/YYYY');
+	}
+
   reProcess() {
     this.processStore.syncProcess({
       productId: ProductCode.RentaVitalicia,
       period: this.processStore.getPeriod(),
     });
+    this.router.navigateByUrl(buildMathReservationRouteUrl([MathReservationRoutes.genInfo, GenInfoRoutes.genReport]));
   }
 
   downloadReport() {
     this.ruleValidationStore.downloadReport(this.processStore.getId());
   }
 
-	downloadSummaryReport() {
-		this.ruleValidationStore.downloadSummaryReport(this.processStore.getId());
-	}
+  downloadSummaryReport() {
+    this.ruleValidationStore.downloadSummaryReport(this.processStore.getId());
+  }
 
   async approve() {
     await this.processStore.approveAsync({

@@ -3,6 +3,34 @@
 	@let data = ruleValidationStore.data();
 	@let status = processStore.getStatus(BlockProcess.GenInfo, StageProcess.RulesValidation);
 
+	<table class="mb-md">
+		<tbody>
+			<tr>
+				<td class="font-weight-semi-bold">Estado</td>
+				<td>
+					:
+					@if (isStageCompleted()) {
+						<p-tag severity="success"
+						       value="Completado"></p-tag>
+					} @else {
+						<p-tag [severity]="status?.statusId === ProcessStatus.Completed ? 'success' :
+														status?.statusId === ProcessStatus.Failed ? 'danger' :
+														status?.statusId === ProcessStatus.Disrupted ? 'danger' : 'secondary'"
+						       [value]="status?.label || 'Pendiente'"></p-tag>
+					}
+				</td>
+			</tr>
+			<tr>
+				<td class="font-weight-semi-bold">Fecha de Generación</td>
+				<td>: {{ status?.createdAt ? (status?.createdAt | date: "dd/MM/yyyy hh:mm:ss a") : "-" }}</td>
+			</tr>
+			<tr>
+				<td class="font-weight-semi-bold">Fecha Cierre</td>
+				<td>: {{ lastDayPeriod() }}</td>
+			</tr>
+		</tbody>
+	</table>
+
 	<p-table [value]="data"
 	         stripedRows
 	         [paginator]="data.length > 10"
@@ -53,11 +81,11 @@
 		</ng-template>
 	</p-table>
 	<div class="flex gap-md mt-md">
-		<!--@if (!isStageCompleted() || ruleValidationStore.hasErrors()) {
+		@if (!isStageCompleted() || ruleValidationStore.hasErrors()) {
 			<p-button severity="primary" label="Reprocesar" icon="bi bi-arrow-clockwise"
 			          [disabled]="status?.statusId === ProcessStatus.InProgress || ruleValidationStore.isLoading()"
 			          (click)="reProcess()"/>
-		}-->
+		}
 
 		<p-button class="button-excel"
 		          label="Resumen"
@@ -80,13 +108,13 @@
 		          [disabled]="ruleValidationStore.isLoading()"
 		          (click)="downloadReportMonthPhoto()"/>
 
-		<!--@if (!isStageCompleted()) {
+		@if (!isStageCompleted()) {
 			<p-button severity="primary"
 			          label="Continuar"
 			          icon="bi bi-arrow-right"
 			          iconPos="right"
 			          [disabled]="status?.statusId !== ProcessStatus.Completed || ruleValidationStore.isLoading()"
 			          (click)="approve()"/>
-		}-->
+		}
 	</div>
 </section>
