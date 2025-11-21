@@ -1,1 +1,240 @@
-<p>data-change-control works!</p>
+<section class="dcc content">
+	@let status = processStore.getStatus(BlockProcess.GenInfo, StageProcess.DataChangeControl);
+
+	<table class="mb-md">
+		<tbody>
+			<tr>
+				<td class="font-weight-semi-bold">Estado</td>
+				<td>
+					:
+					@if (isStageCompleted()) {
+						<p-tag severity="success"
+						       value="Completado"></p-tag>
+					} @else {
+						<p-tag [severity]="status?.statusId === ProcessStatus.Completed ? 'success' :
+														status?.statusId === ProcessStatus.Failed ? 'danger' :
+														status?.statusId === ProcessStatus.Disrupted ? 'danger' : 'secondary'"
+						       [value]="status?.label || 'Pendiente'"></p-tag>
+					}
+				</td>
+			</tr>
+			<tr>
+				<td class="font-weight-semi-bold">Fecha de Estado</td>
+				<td>: {{ status?.createdAt ? (status?.createdAt | date: "dd/MM/yyyy hh:mm:ss a") : "-" }}</td>
+			</tr>
+			<tr>
+				<td class="font-weight-semi-bold">Fecha Cierre</td>
+				<td>: {{ lastDayPeriod() }}</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<p-tabs value="0" (valueChange)="changeTab($event)">
+		<p-tablist>
+			<p-tab value="0">Cambio - endoso</p-tab>
+			<p-tab value="1">Endoso - cambio</p-tab>
+		</p-tablist>
+		<p-tabpanels>
+			<p-tabpanel value="0">
+				@let ceSummary = changeEndorsementStore.data().resumenEndosos;
+				<p-table [value]="ceSummary" stripedRows [loading]="changeEndorsementStore.isLoading()">
+					<ng-template pTemplate="header">
+						<tr>
+							<th></th>
+							<th>Nombre Variable</th>
+							<th>Total Casos</th>
+							<th>Total Aciertos</th>
+							<th>Total Errores</th>
+							<th>% Aciertos</th>
+							<th>% Errores</th>
+							<th>Válido</th>
+						</tr>
+					</ng-template>
+					<ng-template pTemplate="body" let-item>
+						<tr>
+							<td>
+								<p-button icon="bi bi-download"
+								          severity="secondary"
+								          variant="text"
+								          size="small"
+								          [loading]="changeEndorsementStore.isLoading()"
+								          [disabled]="item.totalCasos === 0"
+								          (click)="downloadVariableReport(item)"/>
+							</td>
+							<td class="font-weight-semi-bold">
+								{{ item.nombreVariable }}
+							</td>
+							<td>
+								{{ item.totalCasos | number: "1.0-0" }}
+							</td>
+							<td>
+								{{ item.totalAciertos | number: "1.0-0" }}
+							</td>
+							<td [style]="item.totalErrores > 0 ? 'color: #D32F2F' : 'color: #43A047'">
+								{{ item.totalErrores | number: "1.0-0" }}
+							</td>
+							<td>
+								{{ item.porcentajeAciertos | number: "1.2-2" }}%
+							</td>
+							<td [style]="item.porcentajeError > 0 ? 'color: #D32F2F' : 'color: #43A047'">
+								{{ item.porcentajeError | number: "1.2-2" }}%
+							</td>
+							<td>
+								<p-tag [severity]="item.esValido ? 'success' : 'danger'"
+								       [value]="item.esValido ? 'Correcto' : 'Error'"></p-tag>
+							</td>
+						</tr>
+					</ng-template>
+				</p-table>
+
+				<p-divider></p-divider>
+				<span class="block fs-lg font-weight-semi-bold my-md">RC44</span>
+				@let rc44 = changeEndorsementStore.data().rc44;
+				<p-table [value]="rc44"
+				         stripedRows
+				         [paginator]="true"
+				         [rows]="10"
+				         [loading]="changeEndorsementStore.isLoading()">
+					<ng-template pTemplate="header">
+						<tr>
+							<th style="width: 140px">Identificador</th>
+							<th>Grupo Familiar</th>
+							<th>Campo</th>
+							<th>Valor (T-1)</th>
+							<th>Valor (T)</th>
+						</tr>
+					</ng-template>
+					<ng-template pTemplate="body" let-item>
+						<tr>
+							<td class="font-weight-semi-bold">
+								{{ item.polTxtId }}
+							</td>
+							<td>
+								{{ item.grupoFamiliar }}
+							</td>
+							<td>
+								{{ item.campo }}
+							</td>
+							<td>
+								{{ item.periodoAnterior }}
+							</td>
+							<td>
+								{{ item.periodoActual }}
+							</td>
+						</tr>
+					</ng-template>
+				</p-table>
+
+				<div class="flex gap-md mt-md">
+					<p-button size="small"
+					          label="Reprocesar"
+					          icon="bi bi-arrow-clockwise"
+					          [loading]="processStore.isLoading()"
+					          [disabled]="changeEndorsementStore.isLoading()"/>
+					<p-button class="button-excel"
+					          size="small"
+					          label="Descargar resumen"
+					          icon="bi bi-download"
+					          [loading]="changeEndorsementStore.isLoading()"
+					          (click)="downloadCeSummaryReport()"/>
+					<p-button class="button-excel"
+					          size="small"
+					          label="Descargar reporte"
+					          icon="bi bi-download"
+					          [loading]="changeEndorsementStore.isLoading()"
+					          (click)="downloadCeReport()"/>
+					<p-button size="small"
+					          label="Continuar"
+					          icon="bi bi-arrow-right"
+					          iconPos="right"
+					          [loading]="processStore.isLoading()"
+					          [disabled]="changeEndorsementStore.isLoading()"/>
+				</div>
+			</p-tabpanel>
+			<p-tabpanel value="1">
+				<p-table [value]="endorsementChangeStore.data()"
+				         stripedRows
+				         [paginator]="true"
+				         [rows]="10"
+				         [loading]="endorsementChangeStore.isLoading()">
+					<ng-template pTemplate="header">
+						<tr>
+							<th></th>
+							<th>Código Regla</th>
+							<th>Endoso</th>
+							<th>Total Casos</th>
+							<th>Total Aciertos</th>
+							<th>Total Errores</th>
+							<th>% Aciertos</th>
+							<th>% Errores</th>
+							<th>Válido</th>
+						</tr>
+					</ng-template>
+					<ng-template pTemplate="body" let-item>
+						<tr>
+							<td>
+								<p-button icon="bi bi-download"
+								          severity="secondary"
+								          variant="text"
+								          size="small"
+								          [loading]="endorsementChangeStore.isLoading()"
+								          [disabled]="item.totalCasos === 0"
+								          (click)="downloadRuleReport(item)"/>
+							</td>
+							<td class="font-weight-semi-bold">
+								{{ item.codigoRegla }}
+							</td>
+							<td>
+								{{ item.nombreEndoso }}
+							</td>
+							<td>
+								{{ item.totalCasos | number: "1.0-0" }}
+							</td>
+							<td>
+								{{ item.totalAciertos | number: "1.0-0" }}
+							</td>
+							<td [style]="item.totalErrores > 0 ? 'color: #D32F2F' : 'color: #43A047'">
+								{{ item.totalErrores | number: "1.0-0" }}
+							</td>
+							<td>
+								{{ item.porcentajeAciertos | number: "1.2-2" }}%
+							</td>
+							<td [style]="item.porcentajeError > 0 ? 'color: #D32F2F' : 'color: #43A047'">
+								{{ item.porcentajeError | number: "1.2-2" }}%
+							</td>
+							<td>
+								<p-tag [severity]="item.esValido ? 'success' : 'danger'"
+								       [value]="item.esValido ? 'Correcto' : 'Error'"></p-tag>
+							</td>
+						</tr>
+					</ng-template>
+				</p-table>
+				<div class="flex gap-md mt-md">
+					<p-button size="small"
+					          label="Reprocesar"
+					          icon="bi bi-arrow-clockwise"
+					          [loading]="processStore.isLoading()"
+					          [disabled]="endorsementChangeStore.isLoading()"/>
+					<p-button class="button-excel"
+					          size="small"
+					          label="Descargar resumen"
+					          icon="bi bi-download"
+					          [loading]="endorsementChangeStore.isLoading()"
+					          (click)="downloadEcSummaryReport()"/>
+					<p-button class="button-excel"
+					          size="small"
+					          label="Descargar reporte"
+					          icon="bi bi-download"
+					          [loading]="endorsementChangeStore.isLoading()"
+					          (click)="downloadEcReport()"/>
+					<p-button size="small"
+					          label="Continuar"
+					          icon="bi bi-arrow-right"
+					          iconPos="right"
+					          [loading]="processStore.isLoading()"
+					          [disabled]="endorsementChangeStore.isLoading()"/>
+				</div>
+			</p-tabpanel>
+		</p-tabpanels>
+	</p-tabs>
+</section>
