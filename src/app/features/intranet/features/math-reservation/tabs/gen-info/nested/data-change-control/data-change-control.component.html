@@ -126,11 +126,14 @@
 				</p-table>
 
 				<div class="flex gap-md mt-md">
-					<p-button size="small"
-					          label="Reprocesar"
-					          icon="bi bi-arrow-clockwise"
-					          [loading]="processStore.isLoading()"
-					          [disabled]="changeEndorsementStore.isLoading()"/>
+					@if (!isStageCompleted()) {
+						<p-button size="small"
+						          label="Reprocesar"
+						          icon="bi bi-arrow-clockwise"
+						          [loading]="processStore.isLoading()"
+						          [disabled]="changeEndorsementStore.isLoading()"
+						          (click)="reSync()"/>
+					}
 					<p-button class="button-excel"
 					          size="small"
 					          label="Descargar resumen"
@@ -143,12 +146,15 @@
 					          icon="bi bi-download"
 					          [loading]="changeEndorsementStore.isLoading()"
 					          (click)="downloadCeReport()"/>
-					<p-button size="small"
-					          label="Continuar"
-					          icon="bi bi-arrow-right"
-					          iconPos="right"
-					          [loading]="processStore.isLoading()"
-					          [disabled]="changeEndorsementStore.isLoading()"/>
+					@if (!isStageCompleted()) {
+						<p-button size="small"
+						          label="Continuar"
+						          icon="bi bi-arrow-right"
+						          iconPos="right"
+						          [loading]="processStore.isLoading()"
+						          [disabled]="changeEndorsementStore.isLoading()"
+						          (click)="approve()"/>
+					}
 				</div>
 			</p-tabpanel>
 			<p-tabpanel value="1">
@@ -214,7 +220,8 @@
 					          label="Reprocesar"
 					          icon="bi bi-arrow-clockwise"
 					          [loading]="processStore.isLoading()"
-					          [disabled]="endorsementChangeStore.isLoading()"/>
+					          [disabled]="endorsementChangeStore.isLoading()"
+					          (click)="reSync()"/>
 					<p-button class="button-excel"
 					          size="small"
 					          label="Descargar resumen"
@@ -227,12 +234,16 @@
 					          icon="bi bi-download"
 					          [loading]="endorsementChangeStore.isLoading()"
 					          (click)="downloadEcReport()"/>
-					<p-button size="small"
-					          label="Continuar"
-					          icon="bi bi-arrow-right"
-					          iconPos="right"
-					          [loading]="processStore.isLoading()"
-					          [disabled]="endorsementChangeStore.isLoading()"/>
+
+					@if (!isStageCompleted()) {
+						<p-button size="small"
+						          label="Continuar"
+						          icon="bi bi-arrow-right"
+						          iconPos="right"
+						          [loading]="processStore.isLoading()"
+						          [disabled]="endorsementChangeStore.isLoading()"
+						          (click)="approve()"/>
+					}
 				</div>
 			</p-tabpanel>
 		</p-tabpanels>

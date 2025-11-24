@@ -16,6 +16,10 @@ import { ProcessStatus } from '@intranet/shared/enums/process-status.enum';
 import { BlockProcess } from '@intranet/shared/enums/block-process.enum';
 import { StageProcess } from '@intranet/shared/enums/stage-process.enum';
 import { EcSummaryDto } from '@intranet/features/math-reservation/tabs/gen-info/nested/data-change-control/dto/ec-summary.dto';
+import { buildMathReservationRouteUrl } from '@shared/helpers/build-route.helper';
+import { MathReservationRoutes } from '@intranet/features/math-reservation/shared/enums/math-reservation-routes.enum';
+import { GenInfoRoutes } from '@intranet/features/math-reservation/tabs/gen-info/shared/enums/gen-info.routes';
+import { RouterService } from '@shared/services/router.service';
 
 @Component({
   selector: 'app-data-change-control',
@@ -27,6 +31,8 @@ import { EcSummaryDto } from '@intranet/features/math-reservation/tabs/gen-info/
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export default class DataChangeControlComponent implements OnInit {
+	private readonly router = inject(RouterService);
+
   protected readonly BlockProcess = BlockProcess;
   protected readonly StageProcess = StageProcess;
   protected readonly ProcessStatus = ProcessStatus;
@@ -94,5 +100,30 @@ export default class DataChangeControlComponent implements OnInit {
 
   downloadEcSummaryReport() {
     this.endorsementChangeStore.downloadEcSummaryReport(this.processStore.getId());
+  }
+
+  reSync() {
+    this.processStore.syncProcess({
+      productId: ProductCode.RentaVitalicia,
+      period: this.processStore.getPeriod(),
+    });
+	  this.router.navigateByUrl(buildMathReservationRouteUrl([MathReservationRoutes.genInfo, GenInfoRoutes.genReport]));
+  }
+
+  async approve() {
+    await this.processStore.approveAsync({
+      productId: ProductCode.RentaVitalicia,
+      period: this.processStore.getPeriod(),
+      block: BlockProcess.GenInfo,
+      stage: StageProcess.PaymentControl,
+    });
+
+	  if (!this.processStore.isStageCompleted(BlockProcess.GenInfo, StageProcess.RulesValidation)) {
+		  return;
+	  }
+
+	  this.router.navigateByUrl(
+		  buildMathReservationRouteUrl([MathReservationRoutes.genInfo, GenInfoRoutes.paymentControl]),
+	  );
   }
 }
