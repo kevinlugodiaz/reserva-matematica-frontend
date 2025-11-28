@@ -43,6 +43,12 @@ export default class RulesValidationComponent implements OnInit {
 
   ngOnInit() {
     this.appRefService.isStable(async () => {
+	    this.processStore.syncStatus({
+		    productId: ProductCode.RentaVitalicia,
+		    period: this.processStore.getPeriod(),
+		    block: BlockProcess.GenInfo,
+		    stage: StageProcess.RulesValidation,
+	    });
       await this.ruleValidationStore.executeRules(ProductCode.RentaVitalicia, this.processStore.getPeriod());
 	    this.processStore.syncStatus({
 		    productId: ProductCode.RentaVitalicia,

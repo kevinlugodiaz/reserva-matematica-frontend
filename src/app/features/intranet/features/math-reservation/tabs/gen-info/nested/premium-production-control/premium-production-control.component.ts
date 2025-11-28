@@ -47,7 +47,7 @@ export default class PremiumProductionControlComponent implements OnInit {
         productId: ProductCode.RentaVitalicia,
         period: this.processStore.getPeriod(),
         block: BlockProcess.GenInfo,
-	      stage: StageProcess.PremiumProductionControl,
+        stage: StageProcess.PremiumProductionControl,
       });
     });
   }
@@ -78,7 +78,7 @@ export default class PremiumProductionControlComponent implements OnInit {
       stage: StageProcess.RulesValidation,
     });
 
-    if (!this.processStore.isStageCompleted(BlockProcess.GenInfo, StageProcess.GenReport)) {
+    if (!this.processStore.isStageCompleted(BlockProcess.GenInfo, StageProcess.PremiumProductionControl)) {
       return;
     }
 

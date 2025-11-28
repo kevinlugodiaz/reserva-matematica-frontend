@@ -15,6 +15,7 @@ import { ProcessStatusModel } from '@intranet/shared/models/process-status.model
 import { ProcessStatus } from '@intranet/shared/enums/process-status.enum';
 import { BlockProcess } from '@intranet/shared/enums/block-process.enum';
 import { ApproveStageRequest } from '@intranet/shared/interfaces/approve-stage.interface';
+import { getLastDayOfPeriod } from '@shared/utils/date.util';
 
 type ProcessState = State<ProcessModel | null>;
 
@@ -170,6 +171,10 @@ export const ProcessStore = signalStore(
   withComputed((store) => ({
     getProcessStatus: computed(() => store.data()?.status),
     getPeriod: computed(() => (store.data()?.status ? store.data()!.status[0].periodId! : '')),
+    lastDayPeriod: computed(() => {
+      const period = store.data()?.status ? store.data()!.status[0].periodId! : '';
+      return getLastDayOfPeriod(period);
+    }),
     getId: computed(() => (store.data()?.status ? store.data()!.status[0].processId! : 0)),
   })),
 );

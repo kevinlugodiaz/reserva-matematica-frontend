@@ -166,7 +166,6 @@
 					<ng-template pTemplate="header">
 						<tr>
 							<th></th>
-							<th>Código Regla</th>
 							<th>Endoso</th>
 							<th>Total Casos</th>
 							<th>Total Aciertos</th>
@@ -186,9 +185,6 @@
 								          [loading]="endorsementChangeStore.isLoading()"
 								          [disabled]="item.totalCasos === 0"
 								          (click)="downloadRuleReport(item)"/>
-							</td>
-							<td class="font-weight-semi-bold">
-								{{ item.codigoRegla }}
 							</td>
 							<td>
 								{{ item.nombreEndoso }}
