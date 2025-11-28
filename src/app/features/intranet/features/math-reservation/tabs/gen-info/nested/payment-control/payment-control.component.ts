@@ -4,7 +4,7 @@ import { ProcessStore } from '@intranet/shared/store/process.store';
 import { ProductCode } from '@shared/enums/branch-code.enum';
 import { BlockProcess } from '@intranet/shared/enums/block-process.enum';
 import { StageProcess } from '@intranet/shared/enums/stage-process.enum';
-import { DatePipe } from '@angular/common';
+import { DatePipe, DecimalPipe } from '@angular/common';
 import { Tag } from 'primeng/tag';
 import { ProcessStatus } from '@intranet/shared/enums/process-status.enum';
 import { TableModule } from 'primeng/table';
@@ -16,7 +16,7 @@ import { RouterService } from '@shared/services/router.service';
 
 @Component({
   selector: 'app-payment-control',
-  imports: [DatePipe, Tag, TableModule, Button],
+  imports: [DatePipe, Tag, TableModule, Button, DecimalPipe],
   providers: [PaymentControlStore],
   templateUrl: './payment-control.component.html',
   styleUrl: './payment-control.component.scss',
@@ -63,5 +63,14 @@ export default class PaymentControlComponent implements OnInit {
     this.router.navigateByUrl(
       buildMathReservationRouteUrl([MathReservationRoutes.genInfo, GenInfoRoutes.additionalMetrics]),
     );
+  }
+
+  downloadReportMonthPhoto() {
+    this.processStore.getFile({
+      productId: ProductCode.RentaVitalicia,
+      period: this.processStore.getPeriod(),
+      block: BlockProcess.GenInfo,
+      stage: StageProcess.GenReport,
+    });
   }
 }

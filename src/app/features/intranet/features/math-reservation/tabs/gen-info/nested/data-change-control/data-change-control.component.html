@@ -1,4 +1,5 @@
 <section class="dcc content">
+	<span class="font-weight-semi-bold fs-xl mb-md block">Control de cambio de datos - {{ processStore.periodLabel() }}</span>
 	@let status = processStore.getStatus(BlockProcess.GenInfo, StageProcess.DataChangeControl);
 
 	<table class="mb-md">

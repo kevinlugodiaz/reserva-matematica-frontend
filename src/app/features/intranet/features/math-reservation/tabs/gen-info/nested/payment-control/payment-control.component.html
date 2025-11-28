@@ -1,4 +1,6 @@
 <section class="content">
+	<span class="font-weight-semi-bold fs-xl mb-md block">Control de pagos - {{ processStore.periodLabel() }}</span>
+
 	@let data = paymentControlStore.data();
 	@let status = processStore.getStatus(BlockProcess.GenInfo, StageProcess.PaymentControl);
 	@let isStageCompleted = processStore.isStageCompleted(BlockProcess.GenInfo, StageProcess.PaymentControl);
@@ -36,7 +38,7 @@
 	</table>
 
 	@if (data.groups.length) {
-		<p-table [value]="data.groups" stripedRows>
+		<p-table [value]="data.groups">
 			<ng-template pTemplate="header">
 				<tr>
 					<th>Prestación</th>
@@ -51,26 +53,71 @@
 					<tr>
 						<td>{{ group.prestacion }}</td>
 						<td>{{ item.moneda }}</td>
-						<td>{{ item.opTotal }}</td>
-						<td>{{ item.contTotal }}</td>
-						<td>{{ item.diferencia }}</td>
+						<td>
+							<div class="flex justify-between">
+								<span class="fs-sm">S/</span>
+								<span class="fs-sm">{{ item.opTotal | number: "1.2-2" }}</span>
+							</div>
+						</td>
+						<td>
+							<div class="flex justify-between">
+								<span class="fs-sm">S/</span>
+								<span class="fs-sm">{{ item.contTotal | number: "1.2-2" }}</span>
+							</div>
+						</td>
+						<td>
+							<div class="flex justify-between">
+								<span class="fs-sm">S/</span>
+								<span class="fs-sm">{{ item.diferencia | number: "1.2-2" }}</span>
+							</div>
+						</td>
 					</tr>
 				}
-				<tr>
+				<tr class="row-sub">
 					<td class="font-weight-semi-bold">Sub Total</td>
 					<td></td>
-					<td class="font-weight-semi-bold">{{ group.subtotal.opTotal }}</td>
-					<td class="font-weight-semi-bold">{{ group.subtotal.contTotal }}</td>
-					<td class="font-weight-semi-bold">{{ group.subtotal.diferencia }}</td>
+					<td class="font-weight-semi-bold">
+						<div class="flex justify-between">
+							<span class="fs-sm font-weight-semi-bold">S/</span>
+							<span class="fs-sm font-weight-semi-bold">{{ group.subtotal.opTotal | number: "1.2-2" }}</span>
+						</div>
+					</td>
+					<td class="font-weight-semi-bold">
+						<div class="flex justify-between">
+							<span class="fs-sm font-weight-semi-bold">S/</span>
+							<span class="fs-sm font-weight-semi-bold">{{ group.subtotal.contTotal | number: "1.2-2" }}</span>
+						</div>
+					</td>
+					<td class="font-weight-semi-bold">
+						<div class="flex justify-between">
+							<span class="fs-sm font-weight-semi-bold">S/</span>
+							<span class="fs-sm font-weight-semi-bold">{{ group.subtotal.diferencia | number: "1.2-2" }}</span>
+						</div>
+					</td>
 				</tr>
 			</ng-template>
 			<ng-template pTemplate="footer">
-				<tr>
+				<tr class="row-total">
 					<td class="font-weight-semi-bold">Total consolidado</td>
 					<td></td>
-					<td>{{ data.totalConsolidado?.totalOpSoles }}</td>
-					<td>{{ data.totalConsolidado?.totalContSoles }}</td>
-					<td>{{ data.totalConsolidado?.diferenciaSoles }}</td>
+					<td>
+						<div class="flex justify-between">
+							<span class="fs-sm font-weight-semi-bold">S/</span>
+							<span class="fs-sm font-weight-semi-bold">{{ data.totalConsolidado?.totalOpSoles | number: "1.2-2" }}</span>
+						</div>
+					</td>
+					<td>
+						<div class="flex justify-between">
+							<span class="fs-sm font-weight-semi-bold">S/</span>
+							<span class="fs-sm font-weight-semi-bold">{{ data.totalConsolidado?.totalContSoles | number: "1.2-2" }}</span>
+						</div>
+					</td>
+					<td>
+						<div class="flex justify-between">
+							<span class="fs-sm font-weight-semi-bold">S/</span>
+							<span class="fs-sm font-weight-semi-bold">{{ data.totalConsolidado?.diferenciaSoles | number: "1.2-2" }}</span>
+						</div>
+					</td>
 				</tr>
 			</ng-template>
 		</p-table>
@@ -91,6 +138,14 @@
 		          [loading]="paymentControlStore.isLoading()"
 		          [disabled]="status?.statusId !== ProcessStatus.Completed"
 		          (click)="downloadFile()"/>
+
+		<p-button class="button-excel"
+		          label="Foto del mes"
+		          icon="bi bi-file-excel"
+		          size="small"
+		          [loading]="processStore.isLoading()"
+		          [disabled]="paymentControlStore.isLoading()"
+		          (click)="downloadReportMonthPhoto()"/>
 
 		@if (!isStageCompleted) {
 			<p-button severity="primary"

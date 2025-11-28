@@ -1,5 +1,5 @@
 <section class="premium-production-control">
-	<span class="font-weight-semi-bold fs-xl mb-md block">Control de producción de primas - Julio 2022</span>
+	<span class="font-weight-semi-bold fs-xl mb-md block">Control de producción de primas - {{ processStore.periodLabel() }}</span>
 
 	@let data = premiumProductionControlStore.data();
 	@let status = processStore.getStatus(BlockProcess.GenInfo, StageProcess.PremiumProductionControl);
@@ -106,8 +106,8 @@
 		<div class="flex gap-md mt-md">
 			@if (!isStageCompleted) {
 				<p-button severity="primary" label="Reprocesar" icon="bi bi-arrow-clockwise"
-			            [disabled]="status?.statusId === ProcessStatus.InProgress"
-			            (click)="reProcess()"/>
+				          [disabled]="status?.statusId === ProcessStatus.InProgress"
+				          (click)="reProcess()"/>
 			}
 
 			<p-button class="button-excel"

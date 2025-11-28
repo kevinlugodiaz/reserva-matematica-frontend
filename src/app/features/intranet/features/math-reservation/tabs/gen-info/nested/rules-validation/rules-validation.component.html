@@ -1,5 +1,6 @@
 <section class="premium-production-control">
-	<span class="font-weight-semi-bold fs-xl mb-md block">Control de producción de primas - Julio 2022</span>
+	<span class="font-weight-semi-bold fs-xl mb-md block">Reglas de validación - {{ processStore.periodLabel() }}</span>
+
 	@let data = ruleValidationStore.data();
 	@let status = processStore.getStatus(BlockProcess.GenInfo, StageProcess.RulesValidation);
 
